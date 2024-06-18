@@ -1,0 +1,85 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<span class="calcTitle">Exponential Probability Rate Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="expProb" autocomplete="off" method="GET">
+            <label>λ</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Lambda}}" name="Lambda" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>Lower X</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{LX}}" name="LX" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>Upper X</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{UX}}" name="UX" onkeypress="return isNumberKeyDot(event)"  oninput="toolowProb(this)"/>
+            <p id="UXError" class="inputError"></p>
+            <br>
+            <br>
+            <input type="submit" id="exProbBtn">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Formulas and Output</h2>
+        <div style="overflow-x:auto;">
+            \[\beta = \frac{1}{\lambda} = \frac{1}{ {{Lambda}} } = {{B}}\] 
+        </div>
+        <div style="overflow-x:auto;">
+            \[p( {{LX}} < x < {{UX}}) = \int_{Lower X}^{Upper X} \frac{1}{\beta}e^{\frac{-X}{\beta}} dX = \int_{ {{LX}} }^{ {{UX}} } \frac{1}{ {{B}} }e^{\frac{-X}{ {{B}} }} = 
+            {{less_prb_exp}}\] 
+        </div>
+        \[\begin{eqnarray*}
+        \textrm{The function above finds the probability of the first event} 
+        \end{eqnarray*}\]
+
+        \[\begin{eqnarray*}    
+        \textrm{occuring between {{LX}} and {{UX}} units of X given Lambda = {{Lambda}} } 
+        \end{eqnarray*}\]
+    </div>
+    <div class="Box">
+        <h2>When do you use the exponential distribution (rate)?</h2>
+        <p style="text-align: left;font-size:15px;">  
+        If the question is written as X events per unit/time then you use rate.
+        <br>
+        <br>
+        Example 1 (time, rate), a checkout counter at a supermarket completes the process according to an exponential distribution with a service rate of 6 per hour. A customer arrives at the checout counter. Find the probability of the following events:
+        <br>- The service is completed in between 2 and 5 minutes. 
+        <br><br>To find λ here you need to change the average rate per hour to minutes instead of hours, in other words do λ = 6/60 = 0.1. Now we know λ in the same units as the question asks us which is λ = 0.1 or 0.1 customers arrive per minute. To find the answer to the question above use λ = 0.1, lower X = 2, and upper X = 5.
+        <br>
+        <br>
+        Example 2 (units, rate), A wire breaks on average 5 times per meter, find the probability of the following event:
+        <br>
+        - The wire breaking in the first 0 to 0.5 meters. 
+        <br>
+        <br>
+        λ is equal to 5 here, so in order to solve this use λ = 5, lower X = 0.2 and upper X = 0.5.
+        <br>
+        <br>
+        <p style="text-align: left;font-size:15px;color:red;"> 
+        BEEP BEEP WARNING ALERT, if the mean is already given in the question you might want to check the exponential scale calculator instead because the mean in an exponential distribution does not equal to λ, instead the mean is equal to β. 
+      </div>
+</div>
+<script>
+    function checkexpProbValues() {
+      if (parseInt($('input[name$="LX"]').val()) > parseInt($('input[name$="UX"]').val())) {
+          $("#UXError").text("Your upper X should be higher or equal to your lower X.");
+          $("#exProbBtn").prop("disabled",true);
+          isValOk = false;
+      }
+      else {
+          $("#UXError").text("");
+          $("#exProbBtn").prop("disabled",false);
+          isValOk = true;
+      }
+  }
+  
+  $('input[name$="LX"]').on('change', checkexpProbValues);
+  $('input[name$="UX"]').on('change', checkexpProbValues);
+  
+  jQuery(document).ready(checkexpProbValues);
+  </script>
+{% endblock %}

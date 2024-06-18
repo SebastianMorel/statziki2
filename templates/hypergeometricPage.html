@@ -1,0 +1,154 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<span class="calcTitle">Hypergeometric Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+      <h2>Input</h2>
+            <form action="hypergeometricPage" autocomplete="off" method="GET">
+                <label>How big is the total sample? (N)</label>
+                <br>
+                <input  style="text-align: center;" type="text" required="required" value="{{N}}" name="sampleSize" id="asdasdsdasdsa" onkeypress="return isNumberKey(event)"/>
+                <br>
+                <label>How many tries are we doing? (n)</label>
+                <br>
+                <input  style="text-align: center;" type="text" required="required" value="{{n}}" name="triesSize" id="gasfsdsafsagsa" onkeypress="return isNumberKey(event)"/>
+                <p id="TriesValueError" class="inputError"></p>
+                <br>
+                <label>How many successful observations is in the total sample? (r)</label>
+                <br>
+                <input  style="text-align:  center;" type="text" required="required" value="{{r}}" name="succesfulTries" onkeypress="return isNumberKey(event)"/>
+                <p id="succesfulTriesValueError" class="inputError"></p>
+                <br>
+                <label>How many successes do we want to find?</label>
+                <br>
+                <input style="text-align: center;" type="text" required="required" value="{{y}}" name="successes" onkeypress="return isNumberKey(event)"/>
+                <br>
+                <p id="successesValueError" class="inputError"></p>
+                <br>
+                <input type="submit" id="hypergeometricButton">
+            </form>
+    </div>
+    <div class="Box">
+      <h2>Formulas and Output</h2>
+      \[\frac{\left(\begin{array}{c}r\\ y\end{array}\right) \times \left(\begin{array}{c}N-r\\ n-y\end{array}\right)}{\left(\begin{array}{c}N\\ n\end{array}\right)} = 
+      \frac{\left(\begin{array}{c} {{r}} \\ {{y}}\end{array}\right) \times \left(\begin{array}{c}{{N}}-{{r}}\\ {{n}}-{{y}}\end{array}\right)}{\left(\begin{array}{c}{{N}}\\ {{n}}\end{array}\right)}
+      ={{p_exakt_hyper}}\]
+      \[p(y < {{y}} ) = 1 - p(y \geq {{y}}) = 1 - {{p_more_exact_hyper}} = {{p_less_hyper}}\]
+        
+      \[p(y \leq {{y}}) = 1 - p(y > {{y}}) = 1 - {{p_more_hyper}} = {{p_exact_less_hyper}}\]
+      \[p(y > {{y}}) = 1 - p(y \leq {{y}}) = 1 - {{p_exact_less_hyper}} = {{p_more_hyper}}\]
+      \[p(y \geq {{y}}) = 1 - p(y < {{y}}) = 1 - {{p_less_list_hyper}} = {{p_more_exact_hyper}}\]
+    </div>
+
+<div class="Box">
+  <h2>Graph</h2>
+    <div id="hyperChart">
+    </div>
+</div>
+<div class="Box">
+  <h2>When do you use the hypergeometric distribution?</h2>
+  <p style="text-align: left;font-size:15px;">  
+    Use the hypergeometric distribution when the population is small and when the sampling is without replacement.<br>
+    <br>
+    If n / N < 0.1 it can be approximated using the binomial distribution. <br>
+    <br>
+    Example, an urn contains ten marbles, of which five are green, two are blue and three are red. Three marbles are to be drawn from the urn,<br>
+    one at a time without replacement. 
+    <br>
+
+    - What is the probability that all three marbles drawn will be green?
+    <br>
+
+    - What is the probability to get less than 3, more than 3, less than or equal to 3 and more than or equal to 3 green marbles?
+</div>
+</div>
+<script>
+      function checkhyperValues() {
+        if (parseInt($('input[name$="triesSize"]').val()) > parseInt($('input[name$="sampleSize"]').val())) {
+            $("#TriesValueError").text("The number of tries should be equal to or less than the sample.");
+            isValOk = false;
+        }
+        else {
+            $("#TriesValueError").text("");
+            isValOk = true;
+        }
+
+        if (parseInt($('input[name$="succesfulTries"]').val()) < parseInt($('input[name$="successes"]').val())) {
+            $("#succesfulTriesValueError").text("The number of successes should be equal to or less than the number of successful observations.");
+            isValOk = false;
+        }
+        else {
+            $("#succesfulTriesValueError").text("");
+            isValOk = true;
+        }
+
+        if (parseInt($('input[name$="successes"]').val()) > parseInt($('input[name$="triesSize"]').val())) {
+            $("#successesValueError").text("The number of successes should be equal to or less than the number of tries.");
+            isValOk = false;
+        }
+        else {
+            $("#successesValueError").text("");
+            isValOk = true;
+        }
+
+        if (parseInt($('input[name$="triesSize"]').val()) > parseInt($('input[name$="sampleSize"]').val()) || parseInt($('input[name$="successes"]').val()) > parseInt($('input[name$="succesfulTries"]').val()) || parseInt($('input[name$="successes"]').val()) > parseInt($('input[name$="triesSize"]').val())) {
+          $("#hypergeometricButton").prop("disabled",true);
+        }
+        else {
+          $("#hypergeometricButton").prop("disabled",false);
+        }
+    }
+
+$('input[name$="triesSize"]').on('change', checkhyperValues);
+$('input[name$="sampleSize"]').on('change', checkhyperValues);
+$('input[name$="succesfulTries"]').on('change', checkhyperValues);
+$('input[name$="successes"]').on('change', checkhyperValues);
+
+jQuery(document).ready(checkhyperValues);
+</script>
+<script type="text/javascript">
+    var options = {
+      series: [{
+      name: 'Probability',
+      data: {{pmf_listRounded|safe}}
+    }],
+      chart: {
+      type: 'bar',
+      height: 350
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        endingShape: 'rounded'
+      },
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['transparent']
+    },
+    xaxis: {
+      categories: {{theCount|safe}},
+      title: {
+        text: 'Attempts'
+      }
+    },
+    yaxis: {
+      title: {
+        text: '% Probability'
+      }
+    },
+    fill: {
+      opacity: 1
+    },
+    };
+    var chart = new ApexCharts(document.querySelector("#hyperChart"), options);
+    chart.render();
+</script>
+
+{% endblock %}

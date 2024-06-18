@@ -1,0 +1,229 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Wilcoxon Signed-Rank Test Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="Wilcoxon" autocomplete="off" method="GET" class="formFormat">
+            <label style="margin-left:-5%;">Before</label>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <label style="margin-left:-2%;">After</label>
+            <br>
+            <br>
+            <textarea columns="20" rows="20" style="height: 500px;" type="text" required="required" name="Sample1" onkeypress="return isNumberKeySpaceDot(event)">{{Sample1}}</textarea>
+            <textarea columns="20" rows="20" style="height: 500px;" type="text" required="required" name="Sample2" onkeypress="return isNumberKeySpaceDot(event)">{{Sample2}}</textarea>
+            <br>
+            <input style="margin-top: 20px;" type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Output</h2>
+        <table class="table-sm table-hover table-striped">   
+            <tbody>        
+            <tr>
+                <th scope="row">Statistic</th>
+                <td>{{statistic}}</td>
+            </tr>
+            <tr>
+                <th scope="row">p-value</th>
+                <td>{{pvalue}}</td>
+            </tr>
+            <tr>
+        </div>
+            </tbody>
+        </table>
+    </div>
+    <div class="Box">
+        <h2>What is the Wilcoxon signed rank test?</h2>
+        <p style="text-align: left;font-size:15px;">  
+        <br>
+        When you assume the population behind the sample is not normally distributed, you use a non parametric test. Wilcoxon signed rank test is a non parametric test used to compare two related samples, to assess  whether their population mean ranks differ. In other words it is a non parametric test for pairwise observations. 
+        <br>
+        <br>
+        To find the test statistic you first need take the difference between method A and method B. Then you rank the differences from lowest to highest. Assign any tied values the average of the ranks they would have received had they not been tied. Then you assign a "+" sign to positive differences and a "-" sign to negative differences. Differences that are equal to 0 are removed from the test.  
+        <br>
+        T+ = Rank sum for all the positive differences
+        <br>
+        T- = Rank sum for all the negative differences
+        <br>
+        <br>
+        The test statistic is the smallest value of T+ or T-. In order to find the p-value you need a table made for the Wilcoxon signed rank test; however, if the sample size is large T is approximately normally distributed with the expected value n(n+1)/4 and STD (n(n-1)(2n+1)/24)^0.5.
+        <br>
+        <br>
+        Example, Bob wants to test if there is any difference in efficiency of two learning methods, the data is not normally distributed so a non parametric pairwise test would be the best fit here. The data tests exam scores using method A and then method B to see which one gives the highest exam scores. 
+        <br>
+        <br>
+        Method A = [21 18 16 27 20 21 20 19 25 19 26 29 20 24 16]<br>
+        Method B = [17 18 18 20 25 18 16 18 20 23 24 26 23 18 15]<br>
+        <h2>Example data set</h2>
+        <table class="table-sm table-hover table-striped">   
+            <tbody>        
+                <thead>
+                    <tr>
+                      <th scope="col">Student</th>
+                      <th scope="col">Method A score</th>
+                      <th scope="col">Method B score</th>
+                      <th scope="col">diff</th>
+                      <th scope="col">Rank</th>
+                      <th scope="col">Sign</th>
+                    
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>21</td>
+                      <td>17</td>
+                      <td>4</td>
+                      <td>9</td>
+                      <td>+</td>
+                    
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>18</td>
+                      <td>18</td>
+                      <td>0</td>
+                      <td></td>
+                      <td></td>
+                    
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>16</td>
+                      <td>18</td>
+                      <td>-2</td>
+                      <td>3.5</td>
+                      <td>-</td>
+                    
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>27</td>
+                        <td>20</td>
+                        <td>7</td>
+                        <td>14</td>
+                        <td>+</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">5</th>
+                        <td>20</td>
+                        <td>25</td>
+                        <td>-5</td>
+                        <td>11.5</td>
+                        <td>-</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">6</th>
+                        <td>21</td>
+                        <td>18</td>
+                        <td>3</td>
+                        <td>6</td>
+                        <td>+</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">7</th>
+                        <td>20</td>
+                        <td>16</td>
+                        <td>4</td>
+                        <td>9</td>
+                        <td>+</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">8</th>
+                        <td>19</td>
+                        <td>18</td>
+                        <td>1</td>
+                        <td>1.5</td>
+                        <td>+</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">9</th>
+                        <td>25</td>
+                        <td>20</td>
+                        <td>5</td>
+                        <td>11.5</td>
+                        <td>+</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">10</th>
+                        <td>19</td>
+                        <td>23</td>
+                        <td>-4</td>
+                        <td>9</td>
+                        <td>-</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">11</th>
+                        <td>26</td>
+                        <td>24</td>
+                        <td>2</td>
+                        <td>3.5</td>
+                        <td>+</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">12</th>
+                        <td>29</td>
+                        <td>26</td>
+                        <td>3</td>
+                        <td>6</td>
+                        <td>+</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">13</th>
+                        <td>20</td>
+                        <td>23</td>
+                        <td>-3</td>
+                        <td>6</td>
+                        <td>-</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">14</th>
+                        <td>24</td>
+                        <td>18</td>
+                        <td>6</td>
+                        <td>13</td>
+                        <td>+</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">15</th>
+                        <td>16</td>
+                        <td>15</td>
+                        <td>1</td>
+                        <td>1.5</td>
+                        <td>+</td>
+                      
+                      </tr>
+
+        </table>
+
+    </p>
+    <p style="text-align: left;font-size:15px;"> 
+    <br>
+    hypothesis 0: No difference between the methods <br>
+    hypothesis 1: There is a difference between the methods
+    <br><br>
+
+    The sum of ranks for all positive differences T+ is equal to 75 <br>
+    The sum of ranks for all negative differences T- is equal to 30 <br>
+    Since T- is the smallest of the two differences we use this as our statstic. The p-value can be found using a wilcoxon signed rank test table for sample sizes under 50, else use a normal approximation. 
+    <br>
+    <br>
+    Since the p-value is 0.15 we can't reject the null hypothesis. 
+    </p>
+    </div>
+</div>
+{% endblock %}

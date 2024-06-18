@@ -1,0 +1,55 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<span class="calcTitle">Normal Probability Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <div class="inputForm">
+            <form action="Normal" autocomplete="off" method="GET">
+                <label>x-value</label>
+                <br>
+                <input  style="text-align: center;" type="text" required="required" value="{{Xval}}" name="Xval" onkeypress="return isNumberKeyNegDot(event)"/>
+                <br>
+                <label>μ</label>
+                <br>
+                <input  style="text-align: center;" type="text" required="required" value="{{MU}}" name="MU" onkeypress="return isNumberKeyNegDot(event)"/>
+                <br>
+                <label>σ</label>
+                <br>
+                <input  style="text-align: center;" type="text" required="required" value="{{STD}}" name="STD" onkeypress="return isNumberKeyNegDot(event)"/>
+                <br>
+                <br>
+                <input type="submit">
+            </form>
+        </div>
+    </div>
+    <div class="Box">
+        <h2><b>More</b> or Equal to</h2>
+        <p>P(Z > {{Z_More_Than}}) = {{moreOrEqualto}}</p>
+        <img src="data:image/png;base64,{{ data }}" alt="" height="500", width="500">
+    </div>
+    <div class="Box">
+        <h2><b>Less</b> or Equal to</h2>
+        <p>P(Z < {{Z_Less_Than}}) = {{lessOrEqualto}}</p>
+        <img src="data:image/png;base64,{{ data1 }}" alt="" height="500", width="500">
+    </div>
+    <div class="Box">
+        <h2>When do you use the normal distribution?</h2>
+        <p style="text-align: left;font-size:15px;">  
+            The central limit theorem states that if you have a population with mean μ and standard deviation σ and take large random samples from a population, then the distribution of the sample will be approximately normally distributed.
+            <br>
+            <br>
+            In addition, you can use the normal distribution as an approximation to the binomial distribution and the poisson distribution. 
+            <br>-If X ~ B(n, p) and if n is large then x is approximately normally distributed with variance = np(1-p), 
+            a good rule of thumb is if np(1-p) > 5 you may want to use the normal distribution. 
+            <br> -If x ~ Po(μ) then for large values of of μ you may want to use the normal distribution, a good rule of tumb is if μ > 5. 
+            <br>
+            <br>
+            Example, The weekly amount of money spent on maintenance and repairs by a company was observed, over a long period of time, to be approximately normally distributed with mean $400 and standard deviation 
+            σ $20. If $450 is budgeted for next week, what is the probability that the actual cost will exceed the budgeted amount?
+            <br>
+            <br>
+      </div>
+</div>
+{% endblock %}

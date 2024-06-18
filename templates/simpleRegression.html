@@ -1,0 +1,160 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<span class="calcTitle">Simple Regression Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="simpleRegression" autocomplete="off" method="GET" class="formFormat">
+            <label>Y-values</label>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <label>X1-values</label>
+            <br>
+            <br>
+            <textarea columns="20" rows="20" type="text" required="required" name="Yinput" onkeypress="return isNumberKeySpaceDot(event)">{{Yinput}}</textarea>
+            <textarea columns="20" rows="20" type="text" required="required" name="Xinput" onkeypress="return isNumberKeySpaceDot(event)">{{Xinput}}</textarea>
+            <br>
+            <br>
+            <input style="margin-top: 20px;" type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Summary</h2>
+        <table class="table-sm table-hover table-striped">   
+            <tbody>        
+            <tr>
+                <th scope="row">Sum X</th>
+                <td>{{SUM_X}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum Y</th>
+                <td>{{SUM_Y}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum XY</th>
+                <td>{{SUM_XY}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum X<sup>2</sup></th>
+                <td>{{SUM_Xsquared}}</td>
+            </tr>
+            <tr>
+                <th scope="row">n</th>
+                <td>{{n}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Y mean</th>
+                <td>{{Y_mean}}</td>
+            </tr>
+            <tr>
+                <th scope="row">X mean</th>
+                <td>{{X_man}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Intercept</th>
+                <td>{{a}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Coef</th>
+                <td>{{b}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="Box">
+        <h2>Formulas and Output</h2>
+        <div style="overflow-x:auto;">
+            \[Coefficient = \frac{\sum XY - (\sum X)(\sum Y)/n}{\sum X^2-\sum (X)^2/n}=\frac{\ {{SUM_XY}} - {{SUM_X}}\times{{SUM_Y}}/{{n}}}{ {{SUM_Xsquared}} - {{SUM_Xsquare}}/{{n}}} = {{b}}\]
+        
+        </div>
+        <div style="overflow-x:auto;">
+            \[Intercept = \bar{y}- b \times\bar{x} = {{Y_mean}}- ({{b}} \times {{X_man}}) = {{a}}\] 
+        
+        </div>
+        <div style="overflow-x:auto;">
+            \[SSR = b\sum XY - (\sum X)(\sum Y)/n = {{b}} \times {{SUM_XY}} \times {{SUM_Y}} / {{n}} = {{SSR}}
+        \]
+        </div>
+        <div style="overflow-x:auto;">
+            \[SSE = SST - SSR = {{SST_squared}} - {{SSR}} = {{SSE}}\]
+        
+        </div>
+        <div style="overflow-x:auto;">
+            \[SST = \sum Y^2 - (\sum Y)^2/n = {{SUM_Ysquared}} - {{SUM_Y}}^2 / {{n}} = {{SST_squared}}
+        \]
+
+        </div>
+        <div style="overflow-x:auto;">
+            \[MSR = SSR / 1 = {{SSR}}\]
+        
+        </div>
+        <div style="overflow-x:auto;">
+            \[MSE = SSE / n-2 = {{SSE}}/({{n}}-2) = {{MSE}}\]
+        
+        </div>
+    </div>
+    <div class="Box">
+        <h2>ANOVA</h2>
+        <table class="table-sm table-hover table-striped">   
+            <tbody>        
+                <thead>
+                    <tr>
+                      <th scope="col">ANOVA</th>
+                      <th scope="col">df</th>
+                      <th scope="col">Sum squares</th>
+                      <th scope="col">Mean square</th>
+                      <th scope="col">Fvalue</th>
+                      <th scope="col">PR(>F)</th>
+                    
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>{{df1_simple}}</td>
+                      <td>{{SSR}}</td>
+                      <td>{{SSR}}</td>
+                      <td>{{Fvalue_simple}}</td>
+                      <td>{{p_value_simple}}</td>
+                    
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>{{df2_simple}}</td>
+                      <td>{{SSE}}</td>
+                      <td>{{MSE}}</td>
+                      <td></td>
+                      <td></td>
+                    
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>{{df3_simple}}</td>
+                      <td>{{SST_squared}}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    
+                    </tr>
+        </table>
+    </div>
+    <div class="Box">
+        <h2>Graph</h2>
+        <img src="data:image/png;base64,{{ uri }}" alt="" height="500", width="500">
+    </div>
+    <div class="Box">
+        <h2>Example</h2>
+        <br>
+        <p style="text-align: left;font-size:15px;">  
+            Robert E. Moritz wants to find out using a simple linear regression model if the accountants <br>age (X) 
+            has an effect on the time (in minutes) to finish an accounting task (Y). <br>
+            The following data is from a sample of 10 accountants: <br>
+        X = [20 25 30 37 45 47 55 59 62 65]<br>
+        Y = [15 17 25 32 51 43 60 65 58 68]<br>
+        a) Find the intercept and the coefficient.<br>
+        b) Set up the ANOVA table and test if the coefficient is significant at p=0.05.<br>
+        <br>
+        Using this calculator you can find the answer to the questions above <br> on any simple regression dataset and the method used to find them.</p>
+    </div>
+</div>
+{% endblock %}

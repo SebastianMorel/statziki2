@@ -1,0 +1,131 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">One-way ANOVA Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <br>
+        <form action="Anova" autocomplete="off" method="GET" class="formFormat">    
+                <div class="textInputcenter">  
+                <label>Treatment1</label>
+                <label>Treatment2</label>
+                <label>Treatment3</label>
+                <label>Treatment4</label>
+                <label>Treatment5</label>
+                <br>
+                <br>
+                <textarea columns="20" rows="20" class="AnovaInput"type="text" name="T1" onkeypress="return isNumberKeySpaceDot(event)">{{T1}}</textarea>
+                <textarea columns="20" rows="20" class="AnovaInput" type="text" name="T2"  onkeypress="return isNumberKeySpaceDot(event)">{{T2}}</textarea>
+                <textarea columns="20" rows="20" class="AnovaInput" type="text" name="T3"  onkeypress="return isNumberKeySpaceDot(event)">{{T3}}</textarea>
+                <textarea columns="20" rows="20" class="AnovaInput" type="text" name="T4"  onkeypress="return isNumberKeySpaceDot(event)">{{T4}}</textarea>
+                <textarea columns="20" rows="20" class="AnovaInput" type="text" name="T5"  onkeypress="return isNumberKeySpaceDot(event)">{{T5}}</textarea>
+                </div>
+            <input style="margin-top: 20px;" type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Summary</h2>
+        <table class="table-sm table-hover table-striped">   
+            <tbody>        
+            <tr>
+                <th scope="row">Sum y1^2</th>
+                <td>{{X0totSQ_table}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum y2^2</th>
+                <td>{{X1totSQ_table}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum y3^2</th>
+                <td>{{X2totSQ_table}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum y4^2<sup></sup></th>
+                <td>{{X3totSQ_table}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum y5^2<sup></sup></th>
+                <td>{{X4totSQ_table}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum all</th>
+                <td>{{SumOfAll}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum yij^2</th>
+                <td>{{TotalSquared}}</td>
+            </tr>
+        </div>
+            </tbody>
+        </table>
+    </div>
+    <div class="Box">
+        <h2>Formulas and Output</h2>
+            \[SStreatment = \sum \frac{y_{i}^2}{n_{i}} - \frac{y^2}{N}= \frac{ {{X0totSQ_table}} }{ {{n0}} } + \frac{ {{X1totSQ_table}} }{ {{n1}} } + \frac{ {{X2totSQ_table}} }{ {{n2}} } +
+            ... - \frac{  {{SumOfAll}}^2 }{ {{N}} } = {{SStreatment}}\]
+            \[SSE = SST-SStreatment = {{SST}} - {{SStreatment}} = {{SSE}}\]
+            \[SST = \sum\sum y_{ij}^2-\frac{y^2}{N} = {{TotalSquared}} - \frac{  {{SumOfAll}}^2 }{ {{N}} } = {{SST}}\]
+            \[MSR = \frac{  SStreatment }{ k-1 } = \frac{  {{SStreatment}} }{ {{df1}} } = {{MStreatment}}\]
+            \[MSE = \frac{  SSE }{ N-k } = \frac{  {{SSE}} }{ {{df2}} } = {{MSE}}\]
+            \[Fvalue = \frac{ MSR }{ MSE } = \frac{  {{MStreatment}} }{ {{MSE}} }\]
+    </div>
+    <div class="Box">
+        <h2>Source of variation</h2>
+        <table class="table-sm table-hover table-striped">   
+            <thead>
+                <tr>
+                  <th scope="col">Source of Variation</th>
+                  <th scope="col">Degree of Freedom</th>
+                  <th scope="col">Sum of Square</th>
+                  <th scope="col">Mean Sum of Squares</th>
+                  <th scope="col">F-test</th>
+                  <th scope="col">p-value</th>
+                </tr>
+              </thead>    
+            <tbody>        
+            <tr>
+                <th scope="row">Treatment</th>
+                <td>{{df1}}</td>
+                <td>{{SStreatment}}</td>
+                <td>{{MStreatment}}</td>
+                <td>{{Fvalue}}</td>
+                <td>{{single_tailed_pval}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Error</th>
+                <td>{{df2}}</td>
+                <td>{{SSE}}</td>
+                <td>{{MSE}}</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <th scope="row">Total</th>
+                <td>{{df3}}</td>
+                <td>{{SST}}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="Box">
+        <h2>Example</h2>
+        <p style="text-align: left;">
+            Typical textbook problem that requires a one-way ANOVA</p>
+        <p style="text-align: left;">
+            Pfizer wants to investigate the bioactivity of a new drug on four different levels of dosage. <br>
+            They tested the drug on each level four times on different observations and collected the following data:<br>
+            Dosage 20g = [24 28 37 30]<br>
+            Dosage 30g = [37 44 31 35]<br>
+            Dosage 40g = [42 47 52 35]<br>
+            Dosage 50g = [46 43 57 34]<br>
+            a) Is there evidence that dosage levels affects bioactivity? Use a=0.01.<br>
+            b) Analyse the residuals to check model adequacy (Is the variance on the residuals constant)<br>
+        Using this calculator you can find the answer to the questions above <br> on any one-way ANOVA dataset and the method used to find them.</p>        
+    </div>
+</div>
+{% endblock %}

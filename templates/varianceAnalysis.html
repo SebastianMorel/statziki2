@@ -1,0 +1,33 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Confidence Interval Variance Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="varianceAnalysis" autocomplete="off" method="GET">
+            <label>What Significance level?</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Significance}}" name="Significance" onkeypress="return isNumberKeyDot(event)" oninput="check(this)"/>
+            <br>
+            <label>What is the sample Variance?</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Variance}}" name="Variance" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>How big is the sample?</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{n}}" name="n" onkeypress="return isNumberKey(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Variance Confidence Interval</h2>
+        \[\frac{(n-1)s^{2}}{\chi_{a/2}^{2}} \leq \sigma^{2} \leq\frac{(n-1)s^{2}}{\chi_{1-a/2}^{2}}\]
+        =\[\frac{({{n}}-1) {{Variance}} }{ {{LowerChi}} } \leq \sigma^{2} \leq\frac{({{n}}-1) {{Variance}} }{ {{UpperChi}} }\]
+        =\[{{LowerInterval}} \leq \sigma^{2} \leq {{UpperInterval}}\]
+    </div>
+</div>
+{% endblock %}

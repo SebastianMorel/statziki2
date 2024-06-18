@@ -1,0 +1,451 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D8XY0B254"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-7D8XY0B254');
+    </script>
+    <meta charset="UTF-8">
+    <link rel="icon" href="{% static 'images/icon.png' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'script.js' %}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statziki</title>
+    <script src="{% static 'jquery-3.5.1.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+</head>
+<body>
+    <center>
+<div class="header">
+    <div class="body-particles">
+        <div id="particles-js"></div>
+        <a href="{% url 'index' %}"><h1>Statziki</h1></a>
+    </div>
+    <div class="desktop-navbar">
+    <nav class="nav flex-column flex-sm-row bg-primary justify-content-center">
+    <form action="hypergeometricPage">
+        <button class="btn btn-primary">Hyper Geometrical</button>
+    </form>
+    <form action="Binomial">
+        <button class="btn btn-primary">Binomial</button>
+    </form>
+    <form action="Poisson">
+        <button class="btn btn-primary">Poisson</button>
+    </form>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Normal Probability
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <form action="Normal">
+                <button class="dropdown-item">Normal Probability</button>
+            </form>
+            <form action="Normalinterval">
+                <button class="dropdown-item">Normal Porbability Interval</button>
+            </form>
+        </div>
+    </div> 
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Exponential Probability
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <form action="expProb">
+                <button class="dropdown-item">Exponential Probability (Rate)</button>
+            </form>
+            <form action="expProb1">
+                <button class="dropdown-item">Exponential Probability (Scale)</button>
+            </form>
+        </div>
+    </div>     
+    <form action="bayesTheorem">
+        <button class="btn btn-primary">Bayes Theorem</button>
+    </form>  
+    <form action="Variance">
+        <button class="btn btn-primary">Variance</button>
+    </form>  
+    <form action="correlation">
+        <button class="btn btn-primary">Correlation</button>
+    </form>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Regression
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <form action="simpleRegression">
+                <button class="dropdown-item">Simple Regression</button>
+            </form>
+            <form action="mulRegression">
+                <button class="dropdown-item">Multi Regression</button>
+            </form>
+        </div>
+      </div>      
+    <form action="Anova">
+        <button class="btn btn-primary">One-way ANOVA</button>
+    </form>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Variance Analysis
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <form action="varianceAnalysis">
+                <button class="dropdown-item">Confidence Interval Variance</button>
+            </form>
+            <form action="varianceAnalysis2">
+                <button class="dropdown-item">F-Test Variance</button>
+            </form>
+        </div>
+    </div>
+    <form action="riskRatio">
+        <button class="btn btn-primary">Risk Ratio</button>
+    </form>
+    <form action="oddsRatio">
+        <button class="btn btn-primary">Odds Ratio</button>
+    </form>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            T-Test
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <form action="Ttest2independant">
+                <button class="dropdown-item">Test 2 Indepedant means</button>
+            </form>
+            <form action="PairedTtest">
+                <button class="dropdown-item">Paired T-Test</button>
+            </form>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Proportion Test
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <form action="ProportionTest">
+                <button class="dropdown-item">Proportion Test (1 sample)</button>
+            </form>
+            <form action="ProportionTest2">
+                <button class="dropdown-item">Proportion Test (2 sample)</button>
+            </form>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Z-Test
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <form action="zTest2">
+                <button class="dropdown-item">One Sample Mean Test</button>
+            </form>
+            <form action="zTest">
+                <button class="dropdown-item">Two Sample Mean Test</button>
+            </form>
+        </div>
+      </div>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Non Parametric Test
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <form action="Kruskal">
+                <button class="dropdown-item">Kruskal</button>
+            </form>
+            <form action="Spearman">
+                <button class="dropdown-item">Spearman</button>
+            </form>
+            <form action="Wilcoxon">
+                <button class="dropdown-item">Wilcoxon</button>
+            </form>
+        </div>
+      </div>      
+    <form action="experimentalR">
+        <button class="btn btn-primary">Experimental Analysis using R</button>
+    </form>
+    </nav>
+    </div>
+
+    <!-- PHONE MENU -->
+    <div class="phone-navbar">
+    <nav class="nav flex-column flex-sm-row bg-primary justify-content-center">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Experimental Analysis
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form action="Anova">
+                    <button class="dropdown-item">One-way ANOVA</button>
+                </form>
+                <form action="experimentalR">
+                    <button class="dropdown-item">Experimental Analysis using R</button>
+                </form>                        
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Probability
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form action="hypergeometricPage">
+                    <button class="dropdown-item">Hyper Geometrical</button>
+                </form>
+                <form action="Poisson">
+                    <button class="dropdown-item">Poisson</button>
+                </form>
+                <form action="Normal">
+                    <button class="dropdown-item">Normal Probability</button>
+                </form>
+                <form action="Normalinterval">
+                    <button class="dropdown-item">Normal Porbability Interval</button>
+                </form>
+                <form action="Binomial">
+                    <button class="dropdown-item">Binomial</button>
+                </form>
+                <form action="expProb">
+                    <button class="dropdown-item">Exponential Probability (Rate)</button>
+                </form>
+                <form action="expProb1">
+                    <button class="dropdown-item">Exponential Probability (Scale)</button>
+                </form>
+                <form action="bayesTheorem">
+                    <button class="dropdown-item">Bayes Theorem</button>
+                </form>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Hypothesis testing & Confidence intervals
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form action="ProportionTest">
+                    <button class="dropdown-item">Proportion Test (1 sample)</button>
+                </form>
+                <form action="ProportionTest2">
+                    <button class="dropdown-item">Proportion Test (2 sample)</button>
+                </form>
+                <form action="Ttest2independant">
+                    <button class="dropdown-item">Test 2 Indepedant means</button>
+                </form>
+                <form action="PairedTtest">
+                    <button class="dropdown-item">Paired T-Test</button>
+                </form>
+                <form action="zTest">
+                    <button class="dropdown-item">Z-Test 2 Sample</button>
+                </form>
+                <form action="zTest2">
+                    <button class="dropdown-item">Z-Test 1 Sample</button>
+                </form>
+                <form action="varianceAnalysis">
+                    <button class="dropdown-item">Confidence Interval Variance</button>
+                </form>
+                <form action="varianceAnalysis2">
+                    <button class="dropdown-item">F-test Variance</button>
+                </form>
+                <form action="riskRatio">
+                    <button class="dropdown-item">Risk Ratio</button>
+                </form>
+                <form action="oddsRatio">
+                    <button class="dropdown-item">Odds Ratio</button>
+                </form>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Regression
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form action="simpleRegression">
+                    <button class="dropdown-item">Simple Regression</button>
+                </form>
+                <form action="mulRegression">
+                    <button class="dropdown-item">Multi Regression</button>
+                </form>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Non Parametric Tests
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form action="Kruskal">
+                    <button class="dropdown-item">Kruskal</button>
+                </form>
+                <form action="Spearman">
+                    <button class="dropdown-item">Spearman</button>
+                </form>
+                <form action="Wilcoxon">
+                    <button class="dropdown-item">Wilcoxon</button>
+                </form>     
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Correlation and Variance
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <form action="correlation">
+                    <button class="dropdown-item">Correlation</button>
+                </form>
+                <form action="Variance">
+                    <button class="dropdown-item">Variance</button>
+                </form>    
+            </div>
+        </div>
+    </nav>
+    </div>
+</div>
+<br>
+    {% block content %}
+    <script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Statistics Formula Sheet</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Probability</h2>
+        \[P(A \cup B) = P(A) + P(B) - P(A\cap B)\]
+        \[P(A\cap B) = P(A)P(B|A) \]
+        \[P(A|B) = \frac{P(A\cap B}{P(B)}\]
+        \[P(A|B) = \frac{P(A)P(B | A)}{P(A)P(B|A)+P(A_c)P(B|A_c)}\] 
+        <br>
+
+
+    </div>
+    <div class="Box">
+        <h2>Binomial distribution</h2>
+        \[\left(\begin{array}{c}n\\ y\end{array}\right)p^{y}(1-p)^{n-y}\]
+        \[E(Y) = np\]
+        \[V(Y) = np(1-p)\]
+        \[My(t) = ((1-p)+pe^t)^{n}\]
+
+    </div>
+    <div class="Box">
+        <h2>Hypergeometric distribution</h2>
+        \[\frac{\left(\begin{array}{c}r\\ y\end{array}\right) \times \left(\begin{array}{c}N-r\\ n-y\end{array}\right)}{\left(\begin{array}{c}N\\ n\end{array}\right)}\]
+        \[E(Y) = \frac{nr}{N}\]
+        \[V(Y) = n\left(\frac{r}{N}\right)\left(\frac{N-r}{N}\right)\left(\frac{N-n}{N-1}\right)\]
+    </div>
+    <div class="Box">
+        <h2>V(Y) & E(Y)</h2>
+        \[E(Y) = \frac{\sum x}{n}\]
+        \[V(Y) = { \frac{\sum (x_i - mean)^{2}}{n-1} } = { 
+            \frac{ \sum x^{2} - (\sum x)^{2}/n }{n-1}}\]
+            <b>If Y = a+bX then:</b>
+            \[E(Y) = a+bE(X)\]
+            \[V(Y) = b^2E(X)\]
+    </div>
+    <div class="Box">
+        <h2>Poisson distribution</h2>
+        \[p(y) = \frac{\lambda^{y}e^{\lambda}}{y!}\]
+        \[E(Y) = \lambda\]
+        \[V(Y) = \lambda\]
+        \[My(t) = e^{\lambda(e^t-1)}\]
+   
+    </div>
+    <div class="Box">
+        <h2>Poisson distribution</h2>
+        \[p(y) = \frac{\lambda^{y}e^{\lambda}}{y!}\]
+        \[E(Y) = \lambda\]
+        \[V(Y) = \lambda\]
+        \[My(t) = e^{\lambda(e^t-1)}\]
+   
+    </div>
+    <div class="Box">
+        <h2>Z-test</h2>
+        <b>One sample Z-test</b>
+        \[Z = \frac{\bar{x}-\mu}{s/\sqrt{n}}\]
+        <b>Two sample Z-test</b>
+        \[Z = \frac{\bar{x_1}-\bar{x_2}}{\sqrt{\frac{\sigma_1^{2}}{n_1}+
+        \frac{\sigma_2^{2}}{n2}}}\]
+        <b>One Sample proportion test</b>
+        \[Z = \frac{p_1-p_2}{\sqrt{\frac{p_1+p_2}{n}}}\]
+        <b>Two sample proportion test</b>
+        \[Z = \frac{(p_1-p_2)}{\sqrt{P(1-P)\frac{1}{n_1}}}\]
+
+        where
+
+        \[P = \frac{n_1\times p_1+n_2\times p_2}{n_1+n_2}\]
+    </div>
+    <div class="Box">
+        <h2>Geometric Distribution</h2>
+        \[p\times(1-p)^{y-1}\]
+        \[E(Y) = \frac{1}{p}\]
+        \[V(Y) = \frac{1-p}{p^2}\]
+        \[My(t) = \frac{pe^t}{1-(1-p)e^t}\]
+
+
+   
+    </div>
+    <div class="Box">
+        <h2>Exponential Distribution</h2>
+        \[f(y) = \frac{1}{\beta}e^{-y/\beta}\]
+        \[F(y) = \int \frac{1}{\beta}e^{\frac{-X}{\beta}} dX\]
+        \[P(X>x) =e^{-\lambda x}\]
+        \[P( X< x) = 1-e^{-\lambda x}\]
+        \[E(Y) = \beta\]
+        \[V(Y) = \beta^2\]
+        \[My(t) = (1-\beta t)^{-1}\]
+
+   
+    </div>
+    <div class="Box">
+        <h2>T-test</h2>
+        <b>Two sample t-test</b>
+        \[t = \frac{\bar{x}_1 - \bar{x}_2 }{\sqrt{s_p^2\left(\frac{1}{n_1}+\frac{1}{n_2}\right)} }\]
+
+        where
+
+        \[s_p^2 = \frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2}\]
+
+        <b>One sample t-test</b>
+        \[t = \frac{\bar{x}-\mu}{s/\sqrt{n}}\]
+
+   
+    </div>
+    <div class="Box">
+        <h2>Normal distribution</h2>
+        \[f(y) = \frac{1}{ \sigma \sqrt{2\pi}}e^{-0.5(\frac{x-\mu}{\sigma})^2}\]
+        \[E(Y) = \mu\]
+        \[V(Y) = \sigma^2\]
+        \[My(t) = e^{\mu t+\frac{t^2\sigma^2}{2}}\]
+   
+    </div>
+
+    <div class="Box">
+        <h2>Uniform distribution</h2>
+        \[f(y) = \frac{1}{b-a}\]
+        \[F(y) = \int_{a}^{b} \frac{1}{b-a}\]
+        \[E(Y) = \frac{a+b}{2}\]
+        \[V(Y) = \frac{(b-a)^2}{12}\]
+        \[My(t) = \frac{e^{tb}-e^{ta}}{t(b-a)}\]
+        
+    </div>
+</div>
+    <br>
+    {% endblock %}
+</center>
+<footer class="page-footer font-small blue pt-4" >
+  <div class="footer-copyright text-center py-3" style="background-color:#007BFF; height:auto;">
+            <a href="{% url 'aboutUs' %}" style="margin-right: 40px;">About Us</a>
+            <a href="{% url 'privacyPolicy' %}" style="margin-right: 40px;">Privacy Policy</a>
+            <a href="{% url 'termsofUse' %}" style="margin-right: 40px;">Terms of Use</a>
+            <a href="{% url 'contact' %}" style="margin-right: 40px;">Contact us</a>                               
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="{% static 'bootstrap.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/particlesjs@2.2.3/dist/particles.min.js"></script>
+<script type="text/javascript" src="{% static 'particles.min.js' %}"></script>
+<script type="text/javascript">
+  particlesJS.load('particles-js', "{% static 'particles.json' %}", function() {
+  });
+</script> 
+</body>
+</html>

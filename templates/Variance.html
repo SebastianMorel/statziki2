@@ -1,0 +1,29 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Variance & Mean Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="Variance" autocomplete="off" method="GET">
+            <label>List</label>
+            <br>
+            <input style="text-align: right;" type="text" required="required" value="{{varianceList}}" name="varianceList" onkeypress="return isNumberKeySpaceDot(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+    <h2>Formulas and Output</h2>
+        \[mean = \frac{\sum x}{n} = \frac{ {{sumX}} }{ {{n}} } = {{mean}}\]
+        \[Variance = { \frac{\sum (x_i - mean)^{2}}{n-1} } = { 
+            \frac{ \sum x^{2} - (\sum x)^{2}/n }{n-1}} = { 
+                \frac{ {{sumXsq}} - ({{sumX}})^{2}/ {{n}} }{ {{n}} -1}} = {{variance}}\]
+        \[Stdev = \sqrt{ \frac{\sum (x_i - mean)^{2}}{n-1} } = \sqrt{ 
+            \frac{ \sum x^{2} - (\sum x)^{2}/n }{n-1}} = \sqrt{ 
+                \frac{ {{sumXsq}} - ({{sumX}})^{2}/ {{n}} }{ {{n}} -1}} = {{std}}\]
+    </div>
+</div>
+{% endblock %}

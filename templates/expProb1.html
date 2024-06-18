@@ -1,0 +1,79 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<span class="calcTitle">Exponential Probability Scale Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="expProb1" autocomplete="off" method="GET">
+            <label>β (mean)</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{B}}" name="B" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>Lower X</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{LX}}" name="LX" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>Upper X</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{UX}}" name="UX" onkeypress="return isNumberKeyDot(event)"  oninput="toolowProb(this)"/>
+            <p id="UXError" class="inputError"></p>
+            <br>
+            <br>
+            <input type="submit" id="exProbBtn">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Formulas and Output</h2>
+        <div style="overflow-x:auto;">
+            \[\beta = {{B}} \]
+        </div>
+        <div style="overflow-x:auto;">
+            \[p( {{LX}} < x < {{UX}}) = \int_{Lower X}^{Upper X} \frac{1}{\beta}e^{\frac{-X}{\beta}} dX = \int_{ {{LX}} }^{ {{UX}} } \frac{1}{ {{B}} }e^{\frac{-X}{ {{B}} }} = 
+            {{less_prb_exp}}\] 
+        </div>
+        \[\begin{eqnarray*}
+        \textrm{The function above finds the probability of the first event} 
+        \end{eqnarray*}\]
+
+        \[\begin{eqnarray*}    
+        \textrm{occuring between {{LX}} and {{UX}} units of X given mean = {{B}} } 
+        \end{eqnarray*}\]
+        <br>
+        Probability between interval {{LX}} and {{UX}} =  {{less_prb_exp}}
+        <br>
+        Probability above interval {{LX}} and {{UX}} =  {{ greater_prb_exp}}
+    </div>
+    <div class="Box">
+    <h2>Example</h2>
+        <p style="text-align: left;font-size:15px;">  
+        Example, the magnitude of earthquakes recorded in a region of North America can be modeled as having an exponential distribution with mean 2.4 as measured on the Richter scale. Find the probability
+        that the earthquake striking this region will be under 3.0 on the Richter scale. 
+
+        <br>
+        <br>
+        For this question the mean is already given and the mean on an exponentially distributed variable is equal to 
+        β. To solve this we set 
+        β = 2.4, have lower X as 0 & upper X at 3. 
+    </div>
+</div>
+<script>
+    function checkexpProbValues() {
+      if (parseInt($('input[name$="LX"]').val()) > parseInt($('input[name$="UX"]').val())) {
+          $("#UXError").text("Your upper X should be higher or equal to your lower X.");
+          $("#exProbBtn").prop("disabled",true);
+          isValOk = false;
+      }
+      else {
+          $("#UXError").text("");
+          $("#exProbBtn").prop("disabled",false);
+          isValOk = true;
+      }
+  }
+  
+  $('input[name$="LX"]').on('change', checkexpProbValues);
+  $('input[name$="UX"]').on('change', checkexpProbValues);
+  
+  jQuery(document).ready(checkexpProbValues);
+  </script>
+{% endblock %}

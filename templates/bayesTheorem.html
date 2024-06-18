@@ -1,0 +1,60 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Bayes Theorem Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="bayesTheorem" autocomplete="off" method="GET">
+            <label>P(A) <br>
+                Example P(snows) </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{A}}" name="A" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>P(A2) <br> Example, P(does not snow) </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{B}}" name="B" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>P(B|A1)? <br>Example, P(predicts snow correctly)</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{AgivenB}}" name="AgivenB" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>P(B|A2)? <br>Example, P(predicts snow incorrectly) </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{AgivenBwrong}}" name="AgivenBwrong" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+    <h2>Formula and Output</h2>
+        \[P(A_1|B) = \frac{P(A_1)P(B | A_1)}{P(A_1)P(B|A_1)+P(A_2)P(B|A_2)}\] 
+        <br>
+        \[P(A_1|B) = \frac{ {{A}} \times {{AgivenB}} }{ {{A}} \times  {{AgivenB}} + {{B}} \times {{AgivenBwrong}} } = {{PA1givenB}}\]
+        <br>
+        <br>
+    </div>
+    <div class="Box">
+        <h2>Example, Bayes Theorem </h2>
+        <p style="text-align: left;font-size:15px;">  
+            Sandra is getting married tomorrow with Mattias, at an outdoor ceremony. In recent years, it has snowed only 10 days each year. Unfortunately, the weatherboy 
+            has predicted snow for tomorrow. When it actually snows, the weatherboy correctly forecasts snow 80% of the time. When it doesn't snow, he incorrectly forecasts snow
+            20% of the time. What is the probability of snow on the day of Sandras wedding?
+            <br>
+            <br>
+            The probability of A1 means probability of snow on the wedding day, <br>P(A1) = 10/365 = 0.02739.
+            <br>
+            <br>
+            The probability A2 means probability of it not snowing on the wedding day, P(A2) = 1 - P(A1) = 0.97261.
+            <br>
+            <br>
+            The probability P(B|A1) means the probability of the weatherboy predicting snow correctly which is stated in the question as 0.8. 
+            <br>
+            <br>
+            The probability P(B|A2) means the probability of the weatherboy predicted snow incorrectly which is 0.2 because whenever he is not correct he is wrong. 
+
+    </div>
+</div>
+{% endblock %}

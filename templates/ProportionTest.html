@@ -1,0 +1,62 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Proportion Test (1 sample) Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="ProportionTest" autocomplete="off" method="GET">
+            <label>Enter proportion 1 (p1)</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{p1}}" name="p1" onkeypress="return isNumberKeyDot(event)" oninput="check(this)"/>
+            <br>
+            <label>Enter proportion 2 (p2)</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{p2}}" name="p2" onkeypress="return isNumberKeyDot(event)" oninput="check(this)"/>
+            <br>
+            <label>Sample size?</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{n}}" name="n" onkeypress="return isNumberKey(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <div class="Box">
+        <h2>Formula and Output</h2>
+            \[H_0:p_1=p_2\]
+            \[H_1:p_2 \neq p_2\]
+            \[Z = \frac{p_1-p_2}{\sqrt{\frac{p_1+p_2}{n}}} = \frac{ {{p1}} - {{p2}} }{\sqrt{\frac{ {{p1}} + {{p2}} }{ {{n}} }}} = {{Z}}\]
+            \[pvalue = {{p_values_one_sample}}\]
+        </div>
+    </div>
+    <div class="Box">
+        <h2>When should you use a proportion test (1 sample)? </h2>
+        <p style="text-align: left;font-size:15px;">  
+        If you want to test whether if 2 proportions in a population is the same or not. In order to find the proportions you divide n1 and n2 with N:
+        <br>
+        Proportion 1 = n1 / N
+        <br>
+        Proportion 2 = n2 / N
+        <br>
+        <br>
+        Example, Bob wants to predict the presidental election outcome between Jeb Bush and Bob Iger. He takes a look at the polling where 1000 people have stated who they will vote for.
+        <br>
+        383 people said they will vote for Jeb Bush (n1)
+        <br>
+        420 people said they will vote for Bob Iger (n2)
+        <br> 
+        189 people are undecided
+        <br>
+        <br>
+        N = 1000 (total sample size)
+        <br>
+        Proportion 1 = 383 / 1000 = 0.383
+        <br>
+        Proportion 2 = 420 / 1000 = 0.42
+        <br>
+    </div>
+</div>
+{% endblock %}

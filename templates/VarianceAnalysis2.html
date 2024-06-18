@@ -1,0 +1,42 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">F-Test Variance Calculator</span>
+<div class="grid-wrapper">
+<div class="Box">
+    <h2>Input</h2>
+    <form action="varianceAnalysis2" autocomplete="off" method="GET">
+        <label>Variance sample 1</label>
+        <br>
+        <input style="text-align: center;" type="text" required="required" value="{{Var1}}" name="Var1" onkeypress="return isNumberKeyDot(event)"/>
+        <br>
+        <label>Sample size 1</label>
+        <br>
+        <input style="text-align: center;" type="text" required="required" value="{{n1}}" name="n1" onkeypress="return isNumberKeyDot(event)"/>
+        <br>
+        <label>Variance sample 2</label>
+        <br>
+        <input style="text-align: center;" type="text" required="required" value="{{Var2}}" name="Var2" onkeypress="return isNumberKeyDot(event)"/>
+        <br>
+        <label>Sample size 2</label>
+        <br>
+        <input style="text-align: center;" type="text" required="required" value="{{n2}}" name="n2" onkeypress="return isNumberKeyDot(event)"/>
+        <br>
+        <label>Significance level</label>
+        <br>
+        <input style="text-align: center;" type="text" required="required" value="{{SignificanceF}}" name="SignificanceF" onkeypress="return isNumberKeyDot(event)"  oninput="check(this)"/>
+        <br>
+        <br>
+        <input type="submit">
+    </form>
+</div>
+<div class="Box">
+<h2>Formulas and Output</h2>
+    \[F = \frac{S_1^2}{S_2^2} = \frac{ {{Var1}} }{ {{Var2}} } = {{F}} \]
+    \[df = (n_1 -1 / n_2-1)\]
+    \[pvalueone = {{p_value}}\]
+</div>
+
+</div>
+{% endblock %}

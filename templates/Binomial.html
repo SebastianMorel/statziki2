@@ -1,0 +1,123 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<span class="calcTitle">Binomial Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+      <h2>Input</h2>
+        <form action="Binomial" autocomplete="off" method="GET">
+            <label>How many trials? </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{n}}" name="n" onkeypress="return isNumberKey(event)" oninput="toolowBino(this)"/>
+            <br>
+            <label>Probabity of a successful trial (ex, 0.5) </label>
+            <br>
+            <input style="text-align: center;" step="any" min="0"  type="text" required="required" value="{{p}}" name="p" onkeypress="return isNumberKeyDot(event)" oninput="check(this)"/>
+            <br>
+            <label>How many successful trials do we want? </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{X}}" name="X" onkeypress="return isNumberKey(event)"/>
+            <p id="SucesfulTrialsError" class="inputError"></p>
+            <br>
+            <br>
+            <input type="submit" id="binoBtn">
+        </form>
+    </div>
+    <div class="Box">
+      <h2>Formulas and Output</h2>
+        \[p(y) = \left(\begin{array}{c}n\\ y\end{array}\right) \times p^{y}(1-p)^{n-y}\ = \left(\begin{array}{c} {{n}} \\  {{X}} \end{array}\right) 
+        \times {{p}}^{ {{X}} }(1- {{p}} )^{ {{n}} - {{X}} } = {{p_EXAKT}}\] 
+
+        \[p(y < {{X}} ) = 1 - p(y \geq {{X}}) = 1 - {{p_moreEqualX}} = {{p_lessX}}\]
+        
+        \[p(y \leq {{X}}) = 1 - p(y > {{X}}) = 1 - {{P_moreX}} = {{P_lessEqualX}}\]
+        \[p(y > {{X}}) = 1 - p(y \leq {{X}}) = 1 - {{P_lessEqualX}} = {{P_moreX}}\]
+        \[p(y \geq {{X}}) = 1 - p(y < {{X}}) = 1 - {{p_lessX}} = {{p_moreEqualX}}\]
+    </div>
+    <div class="Box">
+      <h2>Graph</h2>
+        <div id="chart">
+        </div>
+    </div>
+    <div class="Box">
+      <h2>When do you use the binomial distribution?</h2>
+      <p style="text-align: left;font-size:15px;">  
+        Binomial distribution is used to find the probability of success or failure in an experiment that is repeated multiple times. If the sampling is done with replacement you want to use the binomial instead of the hypergeometric distribution.
+        <br>
+        <br>
+        If n > 10 and probability of success < 0.1 then it can be approximated using the poisson distribution
+        <br>
+        If np(1-p) > 5 then it can be approximated using the normal distribution where variance = np(1-p)
+        <br>
+        <br>
+        Example, The probability that a patient recovers from a stomach disease is 0.8, suppose 20 people are known to have contracted this disease. What is the probability that:<br>
+        - exactly 14 recover?
+        <br>- less than 14 recover?
+        <br>- more than 14 recover?
+        <br>- at least 14 recover?
+        <br>- at most 14 recover?
+    </div>    
+</div>
+<script>
+  function checkBinoValues() {
+    if (parseInt($('input[name$="X"]').val()) > parseInt($('input[name$="n"]').val())) {
+        $("#SucesfulTrialsError").text("The number of successful trials should be less or equal to the number of trials");
+        $("#binoBtn").prop("disabled",true);
+        isValOk = false;
+    }
+    else {
+        $("#SucesfulTrialsError").text("");
+        $("#binoBtn").prop("disabled",false);
+        isValOk = true;
+    }
+}
+
+$('input[name$="n"]').on('change', checkBinoValues);
+$('input[name$="X"]').on('change', checkBinoValues);
+
+jQuery(document).ready(checkBinoValues);
+</script>
+<script type="text/javascript">
+        var options = {
+          series: [{
+          name: 'Probability',
+          data: {{problist|safe}}
+        }],
+          chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            endingShape: 'rounded'
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: {{indexPrb|safe}},
+          title: {
+            text: 'Attempts'
+          }
+        },
+        yaxis: {
+          title: {
+            text: '% Probability'
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        };
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+</script>
+{% endblock %}

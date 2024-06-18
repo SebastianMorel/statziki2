@@ -1,0 +1,114 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        chtml: {
+            scale: 1.2
+        },
+        svg: {
+            scale: 1.2
+        }
+    };
+</script>
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Poisson Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="Poisson" autocomplete="off" method="GET">
+            <label>What is the average value of the sample?</label>
+            <br>
+            <input  style="text-align: center;" type="text" required="required" value="{{mu}}" name="mu" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>x-value</label>
+            <br>
+            <input  style="text-align: center;" type="text" required="required" value="{{limit}}" name="limit" onkeypress="return isNumberKey(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Formulas and Output</h2>
+            \[p(y) = \frac{\lambda^{y}e^{-\lambda}}{y!} = \frac{ {{mu}}^{ {{limit}} } e^{- {{mu}} }}{ {{limit}} !} = {{probexakt}}\]
+        
+            \[E(Y) = \lambda\ = {{mu}}\]   
+        
+            \[V(Y) = \lambda = {{mu}}\] 
+        
+            \[p(y < {{limit}} ) = 1 - p(y \geq {{limit}}) = 1 - {{probover_equal}} = {{probunder}}\]
+        
+            \[p(y \leq {{limit}}) = 1 - p(y > {{limit}}) = 1 - {{probover}} = {{probunder_equal}}\]
+            \[p(y > {{limit}}) = 1 - p(y \leq {{limit}}) = 1 - {{probunder_equal}} = {{probover}}\]
+            \[p(y \geq {{limit}}) = 1 - p(y < {{limit}}) = 1 - {{probunder}} = {{probover_equal}}\]
+    </div>
+    <div class="Box">
+        <h2>Chart</h2>
+        <div id="PoiChart">
+        </div>
+    </div>
+    <div class="Box">
+      <h2>When do you use the poisson distribution?</h2>
+      <p style="text-align: left;font-size:15px;">  
+      If you have the mean λ of an event happening per unit and you are asked to find the probability of x events happening in a given time, then the poisson distribution should be used.
+      <br>
+      <br>
+      If the mean λ > 5 it can be approximated using the normal distribution, <br>where the variance = mean λ.
+      <br>
+      <br>
+      Example, Customer arrive at a checkout counter in a department store according to a Poisson distribution at an average of seven per hour, During a given hour, what are the probabilities that:
+      <br>- exactly 3 costumers arriving?
+      <br>- less than 3 costumers arriving?
+      <br>- more than 3 costumers arriving?
+      <br>- 3 or less costumers arriving?
+      <br>- 3 or more costumers arriving?
+    </div>    
+  </div>
+<script type="text/javascript">
+    var poiChart = {
+      series: [{
+      name: 'Probability',
+      data: {{allprobsRounded|safe}}
+    }],
+      chart: {
+        type: 'bar',
+        height: 350
+    },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '55%',
+          endingShape: 'rounded'
+        },
+      },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['transparent']
+    },
+    xaxis: {
+      categories: {{indexPrb|safe}},
+      title: {
+        text: 'Attempts'
+      }
+    },
+    yaxis: {
+      title: {
+        text: '% Probability'
+      }
+    },
+    fill: {
+      opacity: 1
+    },
+    };
+    var chartPoi = new ApexCharts(document.querySelector("#PoiChart"), poiChart);
+    chartPoi.render();
+</script>
+{% endblock %}

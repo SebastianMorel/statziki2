@@ -1,0 +1,70 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<span class="calcTitle">Normal Probability Interval Calculator</span>
+<div class="grid-wrapper">
+<div class="Box">
+    <h2>Input</h2>
+<form action="Normalinterval" autocomplete="off" method="GET">
+    <label>Lower X</label>
+    <br>
+    <input style="text-align: center;" type="text" required="required" value="{{lowerX}}" name="lowerX" onkeypress="return isNumberKeyNegDot(event)"/>
+    <br>
+    <label>Upper X</label>
+    <br>
+    <input style="text-align: center;" type="text" required="required" step="any" value="{{upperX}}" name="upperX" onkeypress="return isNumberKeyNegDot(event)" oninput="toolownInt(this)"/>
+    <br>
+    <p id="UpperXvalueError" class="inputError"></p>
+    <br>
+    <label>μ</label>
+    <br>
+    <input style="text-align: center;" type="text" required="required" value="{{MU}}" name="MU" onkeypress="return isNumberKeyNegDot(event)"/>
+    <br>
+    <label>σ</label>
+    <br>
+    <input style="text-align: center;" type="text" required="required" value="{{STD}}" name="STD" onkeypress="return isNumberKeyNegDot(event)"/>
+    <br>
+    <br>
+    <input type="submit" id="normIntButton">
+</form>
+</div>
+<div class="Box">
+    <h2>Output</h2>
+<p>P({{lowerZ}} < Z < {{upperZ}}) = {{intervalProbability}}</p>
+<img src="data:image/png;base64,{{ data }}" alt="" height="500", width="500">
+</div>
+    <div class="Box">
+        <h2>Normal probability calculator to estimate<br>P(Lower X ≤ Z ≤ Upper X)</h2>
+        <p style="text-align: left;font-size:15px;">  
+            P(Lower X ≤ Z ≤ Upper X) is the probability to land between two values (lower X & upper X) given mean μ and standard deviation σ. 
+            <br>
+            <br>
+            Example, wires manufactued for use in a computer system are specified to have resistance between 0.12 and 0.14 ohms. The actual measured resistance of the wires produced by company A have a normal probability distribution
+        with mean 0.13 ohm and standard deviation 0.005 ohm.
+        <br>
+        - What is the probability that a randomly selected wire from company A will have between 0.12 and 0.14 ohms?
+            <br>
+            <br>
+        For this example you want to have lower X as 0.12 and upper X as 0.14, μ is 0.13 and the standard deviation σ is 0.005. 
+  </div>
+</div>
+<script>
+    function checkNormIntValues() {
+      if (parseInt($('input[name$="lowerX"]').val()) > parseInt($('input[name$="upperX"]').val())) {
+          $("#UpperXvalueError").text("Your upper X should be greater than your lower X");
+          $("#normIntButton").prop("disabled",true);
+          isValOk = false;
+      }
+      else {
+          $("#UpperXvalueError").text("");
+          $("#normIntButton").prop("disabled",false);
+          isValOk = true;
+      }
+  }
+
+$('input[name$="lowerX"]').on('change', checkNormIntValues);
+$('input[name$="upperX"]').on('change', checkNormIntValues);
+
+jQuery(document).ready(checkNormIntValues);
+</script>
+{% endblock %}

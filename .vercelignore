@@ -1,0 +1,21 @@
+# .vercelignore
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.pot
+*.mo
+*.zip
+*.tar.gz
+*.egg-info/
+*.eggs/
+instance/
+.venv/
+.env/
+.env.local
+.env.production
+.env.*.local
+!.vercelignore

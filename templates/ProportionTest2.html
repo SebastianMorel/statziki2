@@ -1,0 +1,58 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Proportion Test (2 sample) Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="ProportionTest2" autocomplete="off" method="GET">
+            <label>Enter proportion 1 (p1)</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{p1_two}}" name="p1_two" onkeypress="return isNumberKeyDot(event)" oninput="check(this)"/>
+            <br>
+            <label>Enter proportion 2 (p2)</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{p2_two}}" name="p2_two" onkeypress="return isNumberKeyDot(event)" oninput="check(this)"/>
+            <br>
+            <label>Sample 1 size</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{n1}}" name="n1" onkeypress="return isNumberKey(event)"/>
+            <br>
+            <label>Sample 2 size</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{n2}}" name="n2" onkeypress="return isNumberKey(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+    <h2>Formulas and Output</h2>
+        \[H_0:p_1=p_2\]
+        \[H_1:p_2 \neq p_2\]
+        \[P = \frac{n_1\times p_1+n_2\times p_2}{n_1+n_2} = \frac{ {{n1}} \times {{p1_two}} + {{n2}} \times {{p2_two}} }{ {{n1}} + {{n2}} } = {{P}}\]
+        \[Z = \frac{(p_1-p_2)}{\sqrt{P(1-P)(\frac{1}{n_1} +\frac{1}{n_2})}} = \frac{({{p1_two}}-{{p2_two}})}{\sqrt{ {{P}} (1- {{P}} )(\frac{1}{ {{n1}} } +\frac{1}{ {{n2}} })}} = {{Z_two}}\]
+        \[pvalue = {{p_values_two}}\]
+    </div>
+    <div class="Box">
+        <h2>When should you use two sample proportion test? </h2>
+        <p style="text-align: left;font-size:15px;">  
+        Two sample proportion test is used to determine whether the proportions of two groups from different samples differ. 
+        <br>
+        Proportion 1 = n1 / N1
+        <br>
+        Proportion 2 = n2 / N2
+        <br>
+        <br>
+            Example, Tim Cook aims to improve the quality of Airpods by reducing defective parts. Therefore, he monitors the efficiency of two assembly lines in the Airpod factory.
+            In line A there are 18 defects reported out of 400 samples. While the line B shows 25 defect out of 350 samples. Is the difference between the two assembly lines significant?
+        <br>
+        <br>
+        N1 = 400
+        <br> N2 = 350
+        <br>Proportion 1 = 18 / 400 = 0.045
+        <br>Proportion 2 = 25 / 350 = 0.0714
+    </div>
+</div>
+{% endblock %}

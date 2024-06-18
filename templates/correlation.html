@@ -1,0 +1,61 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Correlation</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="correlation" autocomplete="off" method="GET">
+            <label>X</label>
+            <br>
+            <input class="wideInput" type="text" required="required" value="{{X}}" name="X" onkeypress="return isNumberKeySpaceDot(event)"/>
+            <br>
+            <label>Y</label>
+            <br>
+            <input class="wideInput" type="text" required="required" value="{{Y}}" name="Y" onkeypress="return isNumberKeySpaceDot(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+    <h2>Formulas and Output</h2>
+        \[\bar{x} = {{Xmean}}\]
+        \[\bar{y} = {{Ymean}}\]
+        \[var(x) = {{VarianceX}}\]
+        \[var(y) = {{VarianceY}}\]
+
+        \[COV_{xy} = \frac{\sum (x-\bar{x})(y- \bar{y})}{(n-1)}
+=\frac{\sum xy - n\times\bar{x}\times\bar{y}}{(n-1)} = \frac{\ ({{sumXY}} - {{n}} \times {{Xmean}} \times {{Ymean}}) }{( {{n}} -1)} = {{COV}}\]
+\[COR_{xy} = \frac{COV_{xy}}{\sqrt{var(x)\times var(y)}} = \frac{ {{COV}} }{\sqrt{ {{VarianceX}} \times  {{VarianceY}} }} = {{CorXY}}\]
+    </div>
+    <div class="Box">
+        <h2>What is Correlation?</h2>
+        <p style="text-align: left;font-size:15px;">  
+            In statistics, correlation is any statistical relationship between two random variables or bivariate data. In other words it measures the degree to which two variables move in relation to each other. <br><br>The formula used to calculate correlation asssumes the variables are
+            normally distributed. If the variables are not normally distributed you may want to use a spearman rank order correlation instead which can be found under the non parametric tests. 
+            <br><br>The correlation coefficient must have a value that is between -1 and 1.
+            <br>• Correlation coefficient of -1 means a negative relationship, in other words the two variables always move in an opposite direction.
+            <br>• Correlation coefficient of 0 means no relationship at all between the two variables, in other words they are independent of each other. 
+            <br>• Correlation coefficient of 1 means a positive relationship, in other words the two variables always move in the same direction. 
+
+        <br>
+        <br>
+        Example, Bob just got a degree in business administration and got hired as a security analyst for the "prestigious" Deutsche Bank. His boss Christian Sewing gave him the task to find the correlation between the stock price of 
+        BP and the price of oil. 
+        
+        <br>
+        <br>
+        Wise man Bob decided to take a sample from the last 10 trading days of BP and oil price to see if there is a meaningful correlation and got the following data:
+        <br>
+        BP stock price = [575 571 570 575 304 320 340 344 340 350]
+        <br>
+        Oil price = [100 103 102 98 112 105 103 100 105 102]
+        <br>
+        <br>
+        Bob calculated the correlation coefficient and got a correlation of -0.577, which means according to Bobs study that BP has a negative correlation with oil price. Without questioning if his results are logical 
+        he sends the report to Christian Sewing. 
+      </div>
+</div>
+{% endblock %}

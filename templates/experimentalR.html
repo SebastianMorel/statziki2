@@ -1,0 +1,889 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Experimental Analysis R tutorial</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Quick recap on one-way ANOVA</h2>
+        <p style="text-align: left;font-size:15px;"> 
+        One-way ANOVA stands for one-way analysis of variance and it is a technique that is commonly used in experimental analysis to compare means of two or more samples. This technique is 
+        commonly used to see if different treatments results in different outcomes. <br>
+        <br>
+
+        <p style="text-align: left;font-size:15px;"> 
+        <b>Inference on ANOVA</b>
+        <br>
+        The F distribution is used when testing the model. 
+        <br>
+        <br>
+        H0: μ1 = μ2 = μ3 = μ..
+        <br>
+        H1: Not all μ are equal
+        <br>
+        <br>
+        <p style="text-align: left;font-size:15px;"> 
+            <b>Model Adequacy</b>
+            <br>
+        One-way ANOVA is reliable as long as the following assumptions are met:
+        <br>
+        - The residuals are normally distributed. <br>
+        - The variance of the residuals are equally spread out, in other words the variance is equal for any value of X. <br>
+        If assumptions are not met then signifiance tests give unreliable results.
+        <p>
+    </div>
+    <div class="Box">
+        <h2>One-way ANOVA using R</h2>
+        <p style="text-align: left;font-size:15px;"> 
+        For this code we will use the following dataset as an example:
+        <br>
+        <style type="text/css">
+            .tg  {border-collapse:collapse;border-color:#aabcfe;border-spacing:0;}
+            .tg td{background-color:#e8edff;border-color:#aabcfe;border-style:solid;border-width:1px;color:#669;
+              font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{background-color:#b9c9fe;border-color:#aabcfe;border-style:solid;border-width:1px;color:#039;
+              font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-phtq{background-color:#D2E4FC;border-color:inherit;text-align:left;vertical-align:top}
+            .tg .tg-fymr{border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
+            .tg .tg-7btt{border-color:inherit;font-weight:bold;text-align:center;vertical-align:top}
+            .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+            </style>
+            <table class="tg">
+            <thead>
+              <tr>
+                <th class="tg-fymr">Material<br>Type</th>
+                <th class="tg-7btt" colspan="5">Product strength</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tg-phtq">1</td>
+                <td class="tg-phtq">3200</td>
+                <td class="tg-phtq">3139</td>
+                <td class="tg-phtq">2864</td>
+                <td class="tg-phtq">2895</td>
+                <td class="tg-phtq">2853</td>
+              </tr>
+              <tr>
+                <td class="tg-0pky">2</td>
+                <td class="tg-0pky">3143</td>
+                <td class="tg-0pky">3218</td>
+                <td class="tg-0pky">3100</td>
+                <td class="tg-0pky">3130</td>
+                <td class="tg-0pky">2863</td>
+              </tr>
+              <tr>
+                <td class="tg-phtq">3</td>
+                <td class="tg-phtq">2800</td>
+                <td class="tg-phtq">2900</td>
+                <td class="tg-phtq">2977</td>
+                <td class="tg-phtq">3049</td>
+                <td class="tg-phtq">2853</td>
+              </tr>
+              <tr>
+                <td class="tg-0pky">4</td>
+                <td class="tg-0pky">2700</td>
+                <td class="tg-0pky">2699</td>
+                <td class="tg-0pky">2600</td>
+                <td class="tg-0pky">2650</td>
+                <td class="tg-0pky">2746</td>
+              </tr>
+            </tbody>
+            </table>
+            <p style="text-align: left;font-size:15px;">
+                First we want to get the data into R, for this example we manually input it. For larger datasets it is recommend to use the read.csv function ie dataset <- read.csv(file = 'data/dataset.csv')
+                <br>
+                <br>
+                <b>#manually input dataset</b> <br>
+                y <- c(3200, 3143, 2800, 2700, 3139, 3218, 2900, 2699, 2864, 3100, 2977, 2600, 2895, 3130, 3049, 2650, 2853, 2863, 2853, 2746)
+                <br>
+                <br>
+                <b>#Generate factors</b>
+                <br>
+                MaterialType <- gl(4, 5) # 4 total rows (4 different levels of material), 5 columns in total.
+                <br>
+                <br>
+                <b>#Code for the ANOVA model</b>
+                <br>ANOVAmodel <- aov(y ~ MaterialType) 
+                <br>
+                summary(ANOVAmodel, conf.level = 0.95) #Display the ANOVA table
+                <br>
+                <br>
+                <b>#Compare means within the model, for this Tukey's HSD is useful.  </b>
+                <br>
+                TukeyHSD(ANOVAmodel) #Tukeys test compare different means in the model
+                <br>
+                <br>
+                <b>#Model adequacy checking</b>
+                <br>                   
+                AdequacyPlots <- par(mfrow = c(2,2)); plot(ANOVAmodel); par(opar) #Normal Q-Q & Residuals vs Fitted plot 
+                <br>
+                AdequacyPlots <- plot(ANOVAmodel) #Alternative code (same results but bigger plots)
+                <br>
+                <br>
+                Residuals <- resid(ANOVAmodel)
+                <br>
+                shapiro.test(Residuals) #Test if the data is normally distributed.
+                <br>
+                library(car); leveneTest(y ~ MaterialType) #Test for homogeneity of variance
+                <br>
+                <br>
+                <b>If assumptions are not met</b>
+                <br>
+                You might want to try a non parametric test:
+                <br>
+                kruskal.test(y ~ MaterialType)
+
+
+            </p>
+        
+        <p>
+    </div>
+    <div class="Box">
+        <h2>R code output</h2>
+        <p style="text-align: center;font-size:15px;"> 
+            <br>
+            <b>summary(ANOVAmodel)</b><br>
+            <img src="{%static 'images/anovaR.jpg' %}" alt="Routput">
+            <br>
+        </p>
+        <p style="text-align: left;font-size:15px;"> 
+            The F value of this model is 10.51 with k-1 = 3 degrees of freedom. The p-value is approximately 0 which means that there is a difference between the material type. 
+            </p>
+            <p style="text-align: center;font-size:15px;"> 
+                <b>TukeyHSD(ANOVAmodel)</b>
+            <br>
+            <img src="{%static 'images/tukey.jpg' %}" alt="Routput">
+        </p>
+        <p style="text-align: left;font-size:15px;"> 
+           The difference between material type 4-1, 4-2, 4-3, is significant. The biggest difference can be seen between material 4 and 1. 
+            </p>
+        <br>
+        <p style="text-align: center;font-size:15px;"> 
+            <b>par(mfrow = c(2,2)); plot(ANOVAmodel); par(opar)</b>
+        <br>
+        <img src="{%static 'images/Adequacy.jpg' %}" alt="Routput">
+        <p style="text-align: left;font-size:15px;"> 
+            The assumption for ANOVA is that residuals have constant variance, in other words they should be equally spread out. <br>
+            <br>For Normal Q-Q the dots should follow the line, if not the dataset might not be normally distributed.
+            <br>
+            The plots indicate that the assumptions are met. 
+            <br>
+            <br>
+            <p style="text-align: center;font-size:15px;"> 
+                <b>shapiro.test(Residuals) & leveneTest(y ~ MaterialType)</b>
+            <br>
+            <img src="{%static 'images/normalitytest.jpg' %}" alt="Routput">
+            <p style="text-align: left;font-size:15px;"> 
+                If p-value > 0.05 the assumptions are met. In this case p-value is above 0.05 on both tests.
+                <br>
+            
+             </p>
+         <br>
+             
+    </p>
+    
+    </div>
+    <div class="Box">
+        <h2>Factorial design, blocking & interactions</h2>
+        <p style="text-align: left;font-size:15px;"> 
+            A factorial experiment is an experiment whose design consist of two or more factors. Each factor have different levels and the goal of this experimental design is to test all possible combinations of these levels. 
+            For example, there are a levels of factor A and b levels of factor B. Each replicate then contains all ab treatment combinations.
+            <br>
+            <br>
+            Blocking is used to reduce the variance from factors that may affect the measured result, but are not of primary interest (nuisance factors). By using blocks for each level of the nuisance factor
+            one can reduce or eliminate the contribution to experimental error contributed by nuisance factors. 
+            <br>
+            <br>
+            Interaction is when the effect of one factor is affected by the value of factor in the same experimental run. As an example, factor A might have a large effect on the outcome when factor B is on a low level, but when B is on a high level
+            factor A might be insignificant. Interactions can be detected using ANOVA or an interaction plot, if the lines on the plot cross eachother a strong interaction might be present.
+    </p>
+    
+    </div>
+    <div class="Box">
+        <h2>Factorial design, blocking & interactions using R</h2>
+        <p style="text-align: left;font-size:15px;">
+            Example dataset, Bob wants to see which material survives the longest, there are two different materials to compare 1 & 2. He suspects temperature affects the survival length of material so he decides to test each material
+            in three different temperature settings (3 levels).
+            In addition, four blocks were used to reduce variance from uninsteresting factors. 
+        </p>
+        <style type="text/css">
+            .tg  {border-collapse:collapse;border-color:#aabcfe;border-spacing:0;}
+            .tg td{background-color:#e8edff;border-color:#aabcfe;border-style:solid;border-width:1px;color:#669;
+              font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{background-color:#b9c9fe;border-color:#aabcfe;border-style:solid;border-width:1px;color:#039;
+              font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-ygnt{background-color:#d2e4fc;border-color:#ffffff;color:#000000;text-align:center;vertical-align:top}
+            .tg .tg-nu5p{background-color:#ffffff;border-color:#ffffff;color:#000000;text-align:left;vertical-align:top}
+            .tg .tg-20w1{background-color:#d2e4fc;border-color:inherit;color:#000000;text-align:center;vertical-align:top}
+            .tg .tg-6lyp{background-color:#e8edff;border-color:#ffffff;color:#000000;text-align:center;vertical-align:top}
+            .tg .tg-5s9u{background-color:#d2e4fc;border-color:inherit;color:#000000;text-align:left;vertical-align:top}
+            .tg .tg-3se7{background-color:#b9c9fe;border-color:inherit;color:#000000;font-weight:bold;text-align:left;vertical-align:top}
+            .tg .tg-yxgu{background-color:#b9c9fe;border-color:inherit;color:#000000;font-weight:bold;text-align:left;vertical-align:top}
+            .tg .tg-tvs7{background-color:#e8edff;border-color:inherit;color:#000000;text-align:center;vertical-align:top}
+            .tg .tg-5yss{background-color:#d2e4fc;border-color:inherit;color:#000000;text-align:center;vertical-align:top}
+            .tg .tg-xthw{background-color:#e8edff;border-color:inherit;color:#000000;text-align:center;vertical-align:top}
+            .tg .tg-uqx2{background-color:#e8edff;border-color:inherit;color:#000000;text-align:left;vertical-align:top}
+            .tg .tg-8dvw{background-color:#b9c9fe;border-color:inherit;color:#000000;text-align:left;vertical-align:top}
+            .tg .tg-9j10{background-color:#d2e4fc;border-color:#ffffff;color:#000000;text-align:center;vertical-align:top}
+            .tg .tg-1dq4{background-color:#e8edff;border-color:#ffffff;color:#000000;text-align:center;vertical-align:top}
+            .tg .tg-6h0f{background-color:#b9c9fe;border-color:inherit;color:#000000;text-align:left;vertical-align:top}
+            </style>
+            <table class="tg">
+            <thead>
+              <tr>
+                <th class="tg-yxgu">Block</th>
+                <th class="tg-20w1" colspan="3">1</th>
+                <th class="tg-tvs7" colspan="3">2</th>
+                <th class="tg-20w1" colspan="3">3</th>
+                <th class="tg-tvs7" colspan="3">4</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tg-3se7">Material Type</td>
+                <td class="tg-5yss">1</td>
+                <td class="tg-5s9u"></td>
+                <td class="tg-5yss">2</td>
+                <td class="tg-xthw">1</td>
+                <td class="tg-uqx2"></td>
+                <td class="tg-xthw">2</td>
+                <td class="tg-5yss">1</td>
+                <td class="tg-5yss"></td>
+                <td class="tg-5yss">2</td>
+                <td class="tg-xthw">1</td>
+                <td class="tg-xthw"></td>
+                <td class="tg-xthw">2</td>
+              </tr>
+              <tr>
+                <td class="tg-yxgu">Temperature</td>
+                <td class="tg-nu5p" colspan="12"></td>
+              </tr>
+              <tr>
+                <td class="tg-8dvw">50 ºF</td>
+                <td class="tg-9j10">90</td>
+                <td class="tg-9j10"></td>
+                <td class="tg-9j10">86</td>
+                <td class="tg-1dq4">96</td>
+                <td class="tg-1dq4"></td>
+                <td class="tg-1dq4">84</td>
+                <td class="tg-9j10">100</td>
+                <td class="tg-9j10"></td>
+                <td class="tg-9j10">92</td>
+                <td class="tg-1dq4">92</td>
+                <td class="tg-1dq4"></td>
+                <td class="tg-1dq4">81</td>
+              </tr>
+              <tr>
+                <td class="tg-6h0f">75 ºF</td>
+                <td class="tg-ygnt">102</td>
+                <td class="tg-ygnt"></td>
+                <td class="tg-ygnt">87</td>
+                <td class="tg-6lyp">106</td>
+                <td class="tg-6lyp"></td>
+                <td class="tg-6lyp">90</td>
+                <td class="tg-ygnt">105</td>
+                <td class="tg-ygnt"></td>
+                <td class="tg-ygnt">97</td>
+                <td class="tg-6lyp">96</td>
+                <td class="tg-6lyp"></td>
+                <td class="tg-6lyp">80</td>
+              </tr>
+              <tr>
+                <td class="tg-8dvw">100 ºF</td>
+                <td class="tg-9j10">114</td>
+                <td class="tg-9j10"></td>
+                <td class="tg-9j10">93</td>
+                <td class="tg-1dq4">112</td>
+                <td class="tg-1dq4"></td>
+                <td class="tg-1dq4">91</td>
+                <td class="tg-9j10">108</td>
+                <td class="tg-9j10"></td>
+                <td class="tg-9j10">95</td>
+                <td class="tg-1dq4">98</td>
+                <td class="tg-1dq4"></td>
+                <td class="tg-1dq4">83</td>
+              </tr>
+            </tbody>
+            </table>
+            <p style="text-align: left;font-size:15px;">
+                <b>#Manually input dataset</b>
+                <br>
+                y <- c(90, 86, 96, 84, 100, 92, 92, 81, 
+       102, 87, 106, 90, 105, 97, 96, 80,
+       114, 93, 112, 91, 108, 95, 98, 83)
+       <br>
+       <br>
+       <b>#Generate factors</b>
+       <br>
+       Temperature <- gl(3, 8, length = 24, labels = c("50 ºF", "75 ºF", '100 ºF')) # 3 Levels, each level 8 times per row & n = 24
+       <br><br>
+        MaterialType <- gl(2, 1, length = 24, labels = c("1", "2")) # 2 levels, every other, pattern = 1 2 1 2 1 2 1.... & n = 24
+        <br><br>
+        Blocks <- gl(4, 2, length = 24, labels = c("1", "2", "3", "4")) # 4 total block "levels", each level 2 columns, pattern = 1 1 2 2 3 3 4 4 1 1.... & n = 24
+        <br><br>
+        <b>Generate ANOVA</b>
+        <br>
+        Model <- aov(y ~ Temperature * MaterialType + blocks) # Temp * Material for interaction & + on blocks because interaction is not used on blocks
+       <br><br>
+       summary(Model)
+       <br><br>
+       <b>Plot Interactions</b>
+       <br>
+        interaction.plot(MaterialType, Temperature, y, type = "b", fixed = TRUE)
+       <br><br>
+        <b>#Model adequacy checking</b>
+                <br>                   
+                AdequacyPlots <- par(mfrow = c(2,2)); plot(Model); par(opar) #Normal Q-Q & Residuals vs Fitted plot 
+                <br>
+                AdequacyPlots <- plot(Model) #Alternative code (same results but bigger plots)
+                <br>
+                <br>
+                Residuals <- resid(Model)
+                <br>
+                shapiro.test(Residuals) #Test if the data is normally distributed.
+                <br>
+                library(car); leveneTest(y ~ MaterialType) #Test for homogeneity of variance
+        
+
+    </p>
+    </div>
+    <div class="Box">
+        <h2>R output</h2>
+        <p style="text-align: center;font-size:15px;"> 
+            <br>
+            <b>summary(ANOVAmodel)</b><br>
+            <img src="{%static 'images/anovafactorial.jpg' %}" alt="Routput">
+            <br>
+        </p>
+        <p style="text-align: left;font-size:15px;"> 
+            In this model there is a significant difference between material 1 & 2, in addition temperature has a substantial effect on survival length of materials. The interaction effect is moderate & the blocking effect is large. 
+            </p>
+            <p style="text-align: center;font-size:15px;"> 
+                <b>interaction.plot(MaterialType, Temperature, y, type = "b", fixed = TRUE)</b>
+            <br>
+            <img src="{%static 'images/interactionplottemp.jpg' %}" alt="Routput">
+        </p>
+        <p style="text-align: left;font-size:15px;"> 
+            The lines are different on all 3 temperature levels; however, the difference is small.
+            </p>
+        <br>
+        <p style="text-align: center;font-size:15px;"> 
+            <b>par(mfrow = c(2,2)); plot(Model); par(opar)</b>
+        <br>
+        <img src="{%static 'images/factoradequate.jpg' %}" alt="Routput">
+        <p style="text-align: left;font-size:15px;"> 
+            The assumption for ANOVA is that residuals have constant variance, in other words they should be equally spread out. <br>
+            <br>For Normal Q-Q the dots should follow the line, if not the dataset might not be normally distributed.
+            <br><br>
+            The plots indicate that the assumptions are met. 
+            <br>
+            <br>
+            <p style="text-align: center;font-size:15px;"> 
+                <b>shapiro.test(Residuals) & leveneTest(y ~ MaterialType)</b>
+            <br>
+            <img src="{%static 'images/normalitytestfactorial (2).jpg' %}" alt="Routput">
+            <p style="text-align: left;font-size:15px;"> 
+                If p-value > 0.05 the assumptions are met. In this case p-value is above 0.05 on both tests.
+                <br>
+            
+             </p>
+         <br>
+         
+    </p>
+</div>
+
+
+
+    <div class="Box">
+        <h2>2&sup3; Factorial design</h2>
+        <p style="text-align: left;font-size:15px;"> 
+            A factorial experiment is an experiment whose design consist of two or more factors. Each factor have different levels and the goal of this experimental design is to test all possible combinations of these levels. 
+            For example, there are a levels of factor A and b levels of factor B. Each replicate then contains all ab treatment combinations.
+            <br>
+            <br>
+            <b>Why did you divide by 12 for effects in the R code?</b>
+            <br>
+            In the example dataset we used a 2&sup3; = 8 design. In this design there are 4 plus signs and 4 minus signs, in addition there are 3 replicates. By multiplying 4*3 you get 12 and that is the
+            value we divide with. 
+    </p>
+    
+    </div>
+    <div class="Box">
+        <h2>Factorial design, 3 factors, 3 replicates & interactions using R</h2>
+        <p style="text-align: left;font-size:15px;">
+            Example dataset, Bob wants to test how far his new ranged energized particle weaponry shoots. He suspects that 3 factors A, B and C affects the range of the blaster:
+            <br>
+            Factor A = Laser projectile size, small = -1, large = 1<br>
+            
+            Factor B = Weapon length, small = -1, large = 1<br>
+            
+            Factor C = Chamber pressure, low = -1, high = 1<br>
+            <br>
+            (I) = low level on all 3 factors, a = high level A and low on B & C, ab means high level on A, B & low on C, abc means high level on all 3 factors.....
+             
+        </p>
+        <style type="text/css">
+            .tg  {border-collapse:collapse;border-color:#aabcfe;border-spacing:0;}
+            .tg td{background-color:#e8edff;border-color:#aabcfe;border-style:solid;border-width:1px;color:#669;
+              font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{background-color:#b9c9fe;border-color:#aabcfe;border-style:solid;border-width:1px;color:#039;
+              font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
+            .tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
+            .tg .tg-8ssm{background-color:#b9c9fe;border-color:#ffffff;font-weight:bold;text-align:left;vertical-align:top}
+            .tg .tg-aw21{border-color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
+            .tg .tg-vg6y{border-color:#ffffff;font-style:italic;font-weight:bold;text-align:center;vertical-align:top}
+            </style>
+            <table class="tg">
+            <thead>
+              <tr>
+                <th class="tg-aw21" colspan="3">Coded<br>Factors</th>
+                <th class="tg-8ssm" rowspan="10"></th>
+                <th class="tg-vg6y" rowspan="2">Treatment<br>Combination<br><br></th>
+                <th class="tg-8ssm" rowspan="10"></th>
+                <th class="tg-vg6y" colspan="3">Replicate<br></th>
+              </tr>
+              <tr>
+                <td class="tg-aw21">A</td>
+                <td class="tg-aw21">B</td>
+                <td class="tg-aw21">C</td>
+                <td class="tg-aw21">I</td>
+                <td class="tg-aw21">II</td>
+                <td class="tg-aw21">III</td>
+              </tr>
+              <tr>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">(I)</td>
+                <td class="tg-zv4m">22</td>
+                <td class="tg-zv4m">31</td>
+                <td class="tg-zv4m">25</td>
+              </tr>
+              <tr>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">a</td>
+                <td class="tg-zv4m">32</td>
+                <td class="tg-zv4m">43</td>
+                <td class="tg-zv4m">29</td>
+              </tr>
+              <tr>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">b</td>
+                <td class="tg-zv4m">35</td>
+                <td class="tg-zv4m">34</td>
+                <td class="tg-zv4m">50</td>
+              </tr>
+              <tr>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">ab</td>
+                <td class="tg-zv4m">55</td>
+                <td class="tg-zv4m">47</td>
+                <td class="tg-zv4m">46</td>
+              </tr>
+              <tr>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">c</td>
+                <td class="tg-zv4m">44</td>
+                <td class="tg-zv4m">45</td>
+                <td class="tg-zv4m">38</td>
+              </tr>
+              <tr>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">ac</td>
+                <td class="tg-zv4m">40</td>
+                <td class="tg-zv4m">37</td>
+                <td class="tg-zv4m">36</td>
+              </tr>
+              <tr>
+                <td class="tg-8jgo">-1</td>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">bc</td>
+                <td class="tg-zv4m">60</td>
+                <td class="tg-zv4m">50</td>
+                <td class="tg-zv4m">54</td>
+              </tr>
+              <tr>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">1</td>
+                <td class="tg-8jgo">abc</td>
+                <td class="tg-zv4m">39</td>
+                <td class="tg-zv4m">41</td>
+                <td class="tg-zv4m">47</td>
+              </tr>
+            </thead>
+            </table>
+            <p style="text-align: left;font-size:15px;">
+              <br>
+              <b>#First we want to get the data into R, for this example we manually input it. For larger datasets it is recommend to use the read.csv function ie dataset <- read.csv(file = 'data/dataset.csv')</b>
+              <br><br>
+                <b>#Manually input dataset</b>
+                
+                <br>Replicate_I = c(22, 32, 35, 55, 44, 40, 60, 39)
+                <br>Replicate_II = c(31, 43, 34, 47, 45, 37, 50, 41)
+                <br>Replicate_III = c(25, 29, 50, 46, 38, 36, 54, 47)
+                <br><br>
+                y = c(Replicate_I, Replicate_II, Replicate_III)
+                <br><br>
+                A <- gl(2, 1, length = 24, labels = c(-1, 1)) #Every other, start with -1, pattern = -1 1 -1 1....
+                <br>B <- gl(2, 2, length = 24, labels = c(-1, 1)) #Pattern = -1 -1 1 1 -1 -1....
+                <br> C <- gl(2, 4, length = 24, labels = c(-1, 1)) #Pattern = -1 -1 -1 -1 1 1 1 1
+                <br>
+                <br>
+                ANOVA <- aov(y ~ A * B * C) #Use * for interactions
+                <br><br><b>#Interaction plot</b>
+                <br>
+                interaction.plot(A, C, y, type = "b", fixed = TRUE)
+                <br>
+                <br>
+                <b>#Model adequacy checking</b>
+                <br>
+                AdequacyPlots <- par(mfrow = c(2,2)); plot(ANOVA); par(opar) #Normal Q-Q & Residuals vs Fitted plot
+                AdequacyPlots <- plot(ANOVA) #Alternative code (same results but bigger plots)
+                <br>
+                <br>
+                <b>#Effects & Regression</b>
+          
+                <br>
+                t = Replicate_I + Replicate_II + Replicate_III #Sum each replicate with corresponding replicate value
+                <br>
+                <br>Ap <- c(-1, 1, -1, 1, -1, 1, -1, 1) #Factorial pattern for A
+                <br>Bp <- c(-1, -1, 1, 1, -1, -1, 1, 1) #Factorial pattern for B
+                <br>Cp <- c(-1, -1, -1, -1, 1, 1, 1, 1) #Factorial pattern for C
+                <br>ABp <- Ap*Bp #Factorial pattern AB interaction
+                <br>ACp <- Ap*Cp #Factorial pattern AC interaction
+                <br>BCp <- Bp*Cp #Factorial pattern BC interaction
+                <br>ABCp <- Ap*Bp*Cp #Factorial pattern ABC interaction
+                <br>
+                <br>A_effect = sum(Ap * t) / (12) #Reason for dividing with 12 can be found on the box to the left.
+                <br>B_effect = sum(Bp * t) / (12)
+                <br>C_effect = sum(Cp * t) / (12)
+                <br>AB_effect = sum(ABp * t) / (12)
+                <br>AC_effect = sum(ACp * t) / (12)
+                <br>BC_effect = sum(BCp * t) / (12)
+                <br>ABC_effect = sum(ABCp * t) / (12)
+                <br>A_effect; B_effect; C_effect; AB_effect; AC_effect; BC_effect; ABC_effect
+                <br>
+                <br>#Regression model 
+                <br>Intercept = mean(y); B_coef = B_effect / 2; C_coef = C_effect / 2; AC_coef = AC_effect / 2
+                <br><br>
+
+    </p>
+    </div>
+    <div class="Box">
+        <h2>R output</h2>
+        <p style="text-align: center;font-size:15px;"> 
+            <br>
+            <b>summary(ANOVAmodel)</b><br>
+            <img src="{%static 'images/ANOVAfullfull.jpg' %}" alt="Routput">
+            <br>
+        </p>
+        <p style="text-align: center;font-size:15px;"> 
+            Factor B, C and interaction AC is significant. 
+            </p>
+            <p style="text-align: center;font-size:15px;"> 
+                <b>interaction.plot(MaterialType, Temperature, y, type = "b", fixed = TRUE)</b>
+            <br>
+            <img src="{%static 'images/interactionplots.jpg' %}" alt="Routput">
+        </p>
+        <p style="text-align: left;font-size:15px;"> 
+            The lines on the interaction between A and C cross eachother, this indicates that a strong interaction between A and C might be present. 
+            </p>
+        <br>
+        <p style="text-align: center;font-size:15px;"> 
+            <b>par(mfrow = c(2,2)); plot(Model); par(opar)</b>
+        <br>
+        <img src="{%static 'images/adequacyfull.jpg' %}" alt="Routput">
+        <p style="text-align: left;font-size:15px;"> 
+            The assumption for ANOVA is that residuals have constant variance, in other words they should be equally spread out. <br>
+            <br>For Normal Q-Q the dots should follow the line, if not the dataset might not be normally distributed.
+            <br><br>
+            The plots indicate that the assumptions are met. 
+            <br>
+            <br>
+            <p style="text-align: center;font-size:15px;"> 
+            <br>
+            <b>Effects & Regression Model</b>
+            <br>
+            <p style="text-align: left;font-size:15px;"> 
+            The significant variables were B, C and the interaction AC. The effects on those are<br>
+            B = 11
+            <br>
+            C = 6.83
+            <br>
+            AC = -8.83
+            <br>
+            <br>
+            By dividing effects by 2 you get coefficients, the intercept is equal to the mean of all observations. The estimated coefficients are:
+            <br>
+            Intercept = 40.83
+            <br>
+            B = 5.67
+            <br>
+            C = 3.42
+            <br>
+            AC = -4.42
+  
+
+             </p>
+         <br>
+         
+    </p>
+  </div>
+  <div class="Box">
+    <h2> What is a contour plot?</h2>
+    <p style="text-align: left;font-size:15px;"> 
+      A contour plot is commonly used in multivariate analysis. In the context of experimental analysis it can be used to find the optimal combination of multiple different factors.
+</p>
+<p style="text-align: left;font-size:15px;">
+  Example dataset, Bob has 3 different material types (A) and he wants to see which one of them can survive in the coldest temperature celsius. Bob has also created a magic mixture that he applies on each material type
+  in hope for some cold resistance (B), in addition there are 3 different sizes (C) on the material types. So for this experiment there are 3 factors and he wants to find the combination of A, B and C that will yield 
+  the most cold resistance. 
+</p>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-color:#aabcfe;border-spacing:0;}
+.tg td{background-color:#e8edff;border-color:#aabcfe;border-style:solid;border-width:1px;color:#669;
+  font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{background-color:#b9c9fe;border-color:#aabcfe;border-style:solid;border-width:1px;color:#039;
+  font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-k6oi{background-color:#45a1ff;border-color:#000000;color:#000000;font-style:italic;font-weight:bold;text-align:center;
+  vertical-align:top}
+.tg .tg-st5q{background-color:#CBCEFB;border-color:#000000;color:#000000;font-style:italic;font-weight:bold;text-align:center;
+  vertical-align:top}
+.tg .tg-2y4w{background-color:#45a1ff;border-color:#000000;color:#000000;text-align:center;vertical-align:top}
+.tg .tg-vs0w{background-color:#9de9ff;border-color:#000000;color:#000000;font-style:italic;font-weight:bold;text-align:center;
+  vertical-align:top}
+.tg .tg-v0nz{background-color:#ffffff;border-color:#000000;color:#000000;text-align:center;vertical-align:top}
+.tg .tg-wp8o{border-color:#000000;text-align:center;vertical-align:top}
+.tg .tg-w4w7{background-color:#FFF;border-color:#000000;text-align:center;vertical-align:top}
+.tg .tg-zjqx{background-color:#EBF5FF;border-color:#000000;text-align:center;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-w4w7"></th>
+    <th class="tg-k6oi" colspan="9">Material Type (A)</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-wp8o"></td>
+    <td class="tg-2y4w" colspan="3">1</td>
+    <td class="tg-2y4w" colspan="3">2</td>
+    <td class="tg-2y4w" colspan="3">3</td>
+  </tr>
+  <tr>
+    <td class="tg-zjqx"></td>
+    <td class="tg-st5q" colspan="9">Mg of magic mixture (B)</td>
+  </tr>
+  <tr>
+    <td class="tg-vs0w">Size<br>(C)</td>
+    <td class="tg-st5q">100</td>
+    <td class="tg-st5q">120</td>
+    <td class="tg-st5q">140</td>
+    <td class="tg-st5q">100</td>
+    <td class="tg-st5q">120</td>
+    <td class="tg-st5q">140</td>
+    <td class="tg-st5q">100</td>
+    <td class="tg-st5q">120</td>
+    <td class="tg-st5q">140</td>
+  </tr>
+  <tr>
+    <td class="tg-vs0w">10</td>
+    <td class="tg-v0nz">-35</td>
+    <td class="tg-v0nz">-45</td>
+    <td class="tg-v0nz">-40</td>
+    <td class="tg-v0nz">17</td>
+    <td class="tg-v0nz">-65</td>
+    <td class="tg-v0nz">20</td>
+    <td class="tg-v0nz">-39</td>
+    <td class="tg-v0nz">-55</td>
+    <td class="tg-v0nz">15</td>
+  </tr>
+  <tr>
+    <td class="tg-vs0w"></td>
+    <td class="tg-v0nz">-25</td>
+    <td class="tg-v0nz">-60</td>
+    <td class="tg-v0nz">15</td>
+    <td class="tg-v0nz">24</td>
+    <td class="tg-v0nz">-58</td>
+    <td class="tg-v0nz">4</td>
+    <td class="tg-v0nz">-35</td>
+    <td class="tg-v0nz">-67</td>
+    <td class="tg-v0nz">-30</td>
+  </tr>
+  <tr>
+    <td class="tg-vs0w">15</td>
+    <td class="tg-v0nz">110</td>
+    <td class="tg-v0nz">-10</td>
+    <td class="tg-v0nz">80</td>
+    <td class="tg-v0nz">55</td>
+    <td class="tg-v0nz">-55</td>
+    <td class="tg-v0nz">110</td>
+    <td class="tg-v0nz">90</td>
+    <td class="tg-v0nz">-28</td>
+    <td class="tg-v0nz">110</td>
+  </tr>
+  <tr>
+    <td class="tg-vs0w"></td>
+    <td class="tg-v0nz">75</td>
+    <td class="tg-v0nz">30</td>
+    <td class="tg-v0nz">54</td>
+    <td class="tg-v0nz">120</td>
+    <td class="tg-v0nz">-44</td>
+    <td class="tg-v0nz">44</td>
+    <td class="tg-v0nz">113</td>
+    <td class="tg-v0nz">-26</td>
+    <td class="tg-v0nz">135</td>
+  </tr>
+  <tr>
+    <td class="tg-vs0w">20</td>
+    <td class="tg-v0nz">4</td>
+    <td class="tg-v0nz">-40</td>
+    <td class="tg-v0nz">31</td>
+    <td class="tg-v0nz">-23</td>
+    <td class="tg-v0nz">-64</td>
+    <td class="tg-v0nz">-20</td>
+    <td class="tg-v0nz">-30</td>
+    <td class="tg-v0nz">-61</td>
+    <td class="tg-v0nz">54</td>
+  </tr>
+  <tr>
+    <td class="tg-vs0w"></td>
+    <td class="tg-v0nz">5</td>
+    <td class="tg-v0nz">-30</td>
+    <td class="tg-v0nz">36</td>
+    <td class="tg-v0nz">-5</td>
+    <td class="tg-v0nz">-62</td>
+    <td class="tg-v0nz">-31</td>
+    <td class="tg-v0nz">-55</td>
+    <td class="tg-v0nz">-52</td>
+    <td class="tg-v0nz">4</td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+<div class="Box">
+    <h2>Experimental analysis, how to create a contour plot in R</h2>
+    <p style="text-align: left;font-size:15px;">
+      
+        <p style="text-align: left;font-size:15px;">
+          <br>
+          <b>#First we want to get the data into R, for this example we manually input it. For larger datasets it is recommend to use the read.csv function ie dataset <- read.csv(file = 'data/dataset.csv')</b>
+          <br>
+            <br>
+            <b>#Manually input dataset</b>
+            <br>
+            y <- c(-35, -25, 110, 75, 4, 5,  -45, -60, -10, 30, -40, -30,  -40, 15, 80, 54, 31, 36,
+       
+            17, 24, 55, 120, -23, -5,  -65, -58, -55, -44, -64, -62,  20, 4, 110, 44, -20, -31,
+            
+            -39, -35, 90, 113, -30, -55,  -55, -67, -28, -26, -61, -52,  15, -30, 110, 135, 54, 4)
+     
+            <br><br>
+            A1 <- y[1:18] #Column 1, 2 & 3 for material type 1
+            <br><br>
+            A2 <- y[19:36] #Column 4, 5 & 6 for material type 2
+            <br>
+            <br>
+            A3 <- y[37:54] #Column 7, 8 & 9 for material type 3
+            <br><br>
+            <br>
+            B <- rep(c(-1, 0, 1), each = 6, times = 1) #Code each level for B: -1, 0, 1. 6 rows in each column.   
+            <br>
+            <br>
+            C <- rep(c(-1, 0, 1), each = 2, times = 3) #Code each level for C: -1, 0, 1. Two rows each level per column. 
+
+            <br><br>
+            <b>#Regression model</b>
+            <br>
+            lm.A1 <- lm(A1 ~ B + C + I(B^2) + I(C^2) + B:C) #Regression model to find best possible combinations (material A1)
+            <br>
+            lm.A2 <- lm(A2 ~ B + C + I(B^2) + I(C^2) + B:C) #Regression model to find best possible combinations (material A2)
+            <br>
+            lm.A3 <- lm(A3 ~ B + C + I(B^2) + I(C^2) + B:C) #Regression model to find best possible combinations (material A3)
+       
+            <br><br>
+            tmp.B <- seq(-1, 1, by = 0.01) #Coordinates for the contour plot, try around and find values that fit your dataset the best. 
+            <br><br>
+            tmp.C <- seq(-1, 1, by = 0.01) #Coordinates for the contour plot, try around and find values that fit your dataset the best. 
+            <br><br>
+           <b>#Create a table with coordinates and their corresponding fitted values</b> 
+            <br>
+            tmp <- list(B = tmp.B, C = tmp.C) 
+            <br>
+            new <- expand.grid(tmp) #Table with fitted values
+            <br>
+            new$fit.1 <- predict(lm.A1, new) #Add predicted values to the table (plot for material A1)
+            <br>
+            new$fit.2 <- predict(lm.A2, new) #Add predicted values to the table (plot for material A2)
+            <br>
+            new$fit.3 <- predict(lm.A3, new) #Add predicted values to the table (plot for material A3)
+            <br><br>
+            
+            library(lattice) #Used to generate the plot
+            <br>
+            <br>
+            <b>#Generate the contour plots</b><br>
+            contourplot(fit.1 ~ B*C, data = new, cuts = 8,
+            
+            xlab = "mg of magic mixture", ylab = "Size",
+            
+            main = "Material type 1 (A = -1)") #plot for material type (A1)
+            <br>
+            <br>
+            contourplot(fit.2 ~ B*C, data = new, cuts = 10,
+            
+            xlab = "mg of magic mixture", ylab = "Size",
+            
+            main = "Material type 2 (A = 0)") #plot for material  type (A2)
+            <br>
+            <br>
+            contourplot(fit.3 ~ B*C, data = new, cuts = 10,
+            
+            xlab = "mg of magic mixture", ylab = "Size",
+            
+            main = "Material type 3 (A = 1)") #plot for material  type (A3)
+          </p>
+        </div>
+    <div class="Box">
+    <h2>R output</h2>
+    <p style="text-align: center;font-size:15px;"> 
+        <br>
+        <img src="{%static 'images/contoura11.jpg' %}" alt="Routput">
+        <br>
+    </p>
+    <p style="text-align: left;font-size:15px;"> 
+        </p>
+        <p style="text-align: center;font-size:15px;"> 
+        <br>
+        <img src="{%static 'images/contoura22.jpg' %}" alt="Routput">
+    </p>
+    <p style="text-align: left;font-size:15px;"> 
+        </p>
+    <br>
+    <p style="text-align: center;font-size:15px;"> 
+
+    <img src="{%static 'images/contoura33.jpg' %}" alt="Routput">
+    <p style="text-align: left;font-size:15px;"> 
+        Since Bob wants to find the material with the most cold resistance he now looks for the lowest value in all the plots. In this case the lowest value can be seen in material type 3 plot at -80 degrees celsius. 
+        The best combination is material type 3 with medium level of magic mixture and the lowest size level.
+        <br>
+    </p>
+  </div>
+</div>
+{% endblock %}

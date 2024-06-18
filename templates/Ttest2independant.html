@@ -1,0 +1,56 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">T-test 2 Independent Means Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="Ttest2independant" autocomplete="off" method="GET">
+            <label>Sample 1</label>
+            <br>
+            <input class="wideInput" type="text" required="required" value="{{Sample1}}" name="Sample1" onkeypress="return isNumberKeySpaceDot(event)"/>
+            <br>
+            <label>Sample 2</label>
+            <br>
+            <input class="wideInput" type="text" required="required" value="{{Sample2}}" name="Sample2" onkeypress="return isNumberKeySpaceDot(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Formulas and Output</h2>
+            \[s_p^2 = \frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2} = \frac{ ({{n1}}-1){{variance1}}+({{n2}}-1){{variance2}} }{ {{n1}} + 
+        {{n2}} - 2} = {{PooledSTD}}\]
+
+            \[t = \frac{\bar{x}_1 - \bar{x}_2 }{\sqrt{s_p^2\left(\frac{1}{n_1}+\frac{1}{n_2}\right)} } = \frac{ {{mean1}} - {{mean2}} }{\sqrt{ {{PooledSTD}} \left(\frac{1}{ {{n2}} }+\frac{1}{ {{n2}} }\right)} }
+            = {{tvalue}}
+            \]
+
+    </div>
+    <div class="Box">
+        <h2>When should you use a two sample <br>
+            t-test?</h2>
+        <p style="text-align: left;font-size:15px;">  
+          The two sample t-test is a method used to test whether two population means with unknown variance are equal or not. The variance of the populations are generally unkown if the 
+          sample size is small, commonly when n < 50. 
+          <br>
+          <br>
+          According to the central limit theorem, as n approaches infinity the sample will be normally distributed and the variance will be known, in that case you use a Z test instead. You can verify this yourself by comparing the values of a t-table and a z-table as n approaches infinity.
+        <br>
+        <br>
+        Example, under normal conditions, is the average body temperature the same for men and women? Medical researchers interested in this question collected data from a large number of men and women, and 
+        random sample from that data are presented in the accompanying lists. Is there sufficient evidence that mean body temperatures differ for men and women?
+        <br>
+        Body temperature (°F)
+        <br>
+        Men = [96.9 97.4 97.5 97.8 97.8 97.9 98 98.6 98.8]
+        <br>
+        Women = [97.8 98 98.2 98.2 98.2 98.6 98.8 99.2 99.4]
+        <br>
+        <br>
+        You want to use a two sample t-test here because the sample size is small and since the question does not give us a variance we can assume the variances are unknown. 
+    </div>
+</div>
+{% endblock %}

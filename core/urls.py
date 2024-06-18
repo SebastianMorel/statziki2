@@ -1,0 +1,40 @@
+from django.contrib import admin
+from django.urls import path, include
+
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('hypergeometricPage', views.hypergeometricPage, name='hypergeometricPage'),
+    path('Poisson', views.Poisson, name='Poisson'),
+    path('Normal', views.Normal, name='Normal'),
+    path('Normalinterval', views.Normalinterval, name='Normalinterval'),
+    path('Binomial', views.Binomial, name='Binomial'),
+    path('mulRegression', views.mulRegression, name='mulRegression'),
+    path('simpleRegression', views.simpleRegression, name='simpleRegression'),
+    path('Anova', views.Anova, name='Anova'),
+    path('expProb', views.expProb, name='expProb'),
+    path('expProb1', views.expProb1, name='expProb1'),
+    path('Ttest2independant', views.Ttest2independant, name='Ttest2independant'),
+    path('PairedTtest', views.PairedTtest, name='PairedTtest'),
+    path('varianceAnalysis', views.varianceAnalysis, name='varianceAnalysis'),
+    path('varianceAnalysis2', views.varianceAnalysis2, name='varianceAnalysis2'),
+    path('ProportionTest', views.ProportionTest, name='ProportionTest'),
+    path('ProportionTest2', views.ProportionTest2, name='ProportionTest2'),
+    path('zTest', views.zTest, name='zTest'),
+    path('zTest2', views.zTest2, name='zTest2'),
+    path('riskRatio', views.riskRatio, name='riskRatio'),
+    path('oddsRatio', views.oddsRatio, name='oddsRatio'),
+    path('bayesTheorem', views.bayesTheorem, name='bayesTheorem'),
+    path('correlation', views.correlation, name='correlation'),
+    path('Mannwhitneyu', views.Mannwhitneyu, name='Mannwhitneyu'),
+    path('Wilcoxon', views.Wilcoxon, name='Wilcoxon'),
+    path('Kruskal', views.Kruskal, name='Kruskal'),
+    path('Spearman', views.Spearman, name='Spearman'),
+    path('Variance', views.Variance, name='Variance'),
+    path('experimentalR', views.experimentalR, name='experimentalR'),
+    path('aboutUs', views.aboutUs, name='aboutUs'),
+    path('privacyPolicy', views.privacyPolicy, name='privacyPolicy'),
+    path('termsofUse', views.termsofUse, name='termsofUse'),
+    path('contact', views.contact, name='contact'),
+]

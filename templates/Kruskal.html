@@ -1,0 +1,90 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Kruskal Wallis Test Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2> 
+        <form action="Kruskal" autocomplete="off" method="GET" class="formFormat">
+        <label style="margin-left:-2%;">Sample1</label>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <label>Sample2</label>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <label>Sample3</label>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <label>Sample4</label>
+        <br>
+        <br>
+            <textarea columns="20" rows="20" type="text" required="required" name="Sample1" onkeypress="return isNumberKeySpaceDot(event)">{{Sample1}}</textarea>
+            <textarea columns="20" rows="20" type="text" required="required" name="Sample2" onkeypress="return isNumberKeySpaceDot(event)">{{Sample2}}</textarea>
+            <textarea columns="20" rows="20" type="text" required="required" name="Sample3" onkeypress="return isNumberKeySpaceDot(event)">{{Sample3}}</textarea>
+            <textarea columns="20" rows="20" type="text" required="required" name="Sample4" onkeypress="return isNumberKeySpaceDot(event)">{{Sample4}}</textarea>
+            <br>
+            <br>
+            <input style="margin-top: 20px;" type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Output</h2>
+        <table class="table-sm table-hover table-striped">   
+            <tbody>        
+            <tr>
+                <th scope="row">Statistic</th>
+                <td>{{statistic}}</td>
+            </tr>
+            <tr>
+                <th scope="row">p-value</th>
+                <td>{{pvalue}}</td>
+            </tr>
+            <tr>
+        </div>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="Box">
+        <h2>What is the Kruskal Wallis test?</h2>
+        <p style="text-align: left;font-size:15px;">  
+        <br>
+        When you assume the population behind the sample is not normally distributed, you use a non parametric test. The Kruskal Wallis test is a non parametric method used for one-way analysis of variance. In other words it is like the Mann Whitney U-test but for two or more samples.  
+        <br>
+        <br>
+        The method used to find the test statistic and p-value is to first rank all data from all groups togheter. Assign any tied values the average of the ranks they would have received had they not been tied. 
+        <br>
+        <br>
+        The test statistic H is calculated with the following formula:
+        <br>
+        \[H = \frac{12}{n(n-1)}\times \sum\frac{R_i^2}{n_i}\times-3(n+1)\]
+        <br>
+        n = total sample size on all samples and ni is the sample size for the ith sample. Ri^2 is equal to the sum of the ranks in the ith sample squared. So first you sum the ranks in each sample and then you take the square on each sum. When H is found you use a table for the Kruskal Wallis test if k=3, if k > 3 the test statistic H is approximately Chi^2 distributed with k-1 degrees of freedom (k = number of samples). If H > critical value then you can reject the null hypothesis.
+        <br>
+        <br>
+        Example, Bob is testing 4 different training programs and he assumes the samples are non parametric thus a Kruskal Wallis test has the best fit. The dataset is:
+        <br>
+        <br>
+        Program A = [24 30 37 39 40 45 49 70]<br>
+        Program B = [32 33 36 44 44 46 58 65]<br>
+        Program C = [23 30 32 37 38 40 53 65]<br>
+        Program D = [27 31 36 40 42 50 62 66]<br>
+        <br>
+        hypothesis 0: the programs are equally effective<br>
+        hypothesis 1: the programs are not equally effective
+        <br>
+        <br>
+        Total sample size n = 32, n1 = 8, n2 = 8, n3 = 8, n4 = 8.<br>
+        The ranks for all observations are:
+        <br>
+        A = [2 4.5 12.5 15 17 22 24 32] R1 = 129<br>
+        B = [7.5 9 10.5 20.5 20.5 23 27 29.5] R2 = 147.5<br>
+        C = [1 4.5 7.5 12.5 14 17 26 29.5] R3 = 112 <br>
+        D = [3 6 10.5 17 19 25 28 31] R4 = 139.5<br>
+        <br>
+        \[H = \frac{12}{32(32-1)}\times (\frac{129^2}{8} + \frac{147.5^2}{8} + \frac{112^2}{8} + \frac{139.5^2}{8})\times-3(32+1) = 1\]
+        <br>
+        The test statistic H = 1 and the p-value with 32-1 degrees of freedom from the chi^2 distribution is 0.8, in other words you can not reject the null hypothesis.      
+        </p>
+      </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Z-Test (1 Sample) Calculator</span>
+<div class="grid-wrapper">    
+    <div class="Box">
+        <h2>Input 1 Sample</h2>
+        <form action="zTest2" autocomplete="off" method="GET">
+            <label>Sample mean</label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Sample}}" name="Sample" onkeypress="return isNumberKeyNegDot(event)"/>
+            <br>
+            <label>μ </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{mu}}" name="mu" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>Variance </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{variance1}}" name="variance1" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>Sample size </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{n}}" name="nSample" onkeypress="return isNumberKey(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Formula and Output</h2>
+        \[s = \sqrt{ {{variance1}} }\]
+        \[Z = \frac{\bar{x}-\mu}{s/\sqrt{n}} = \frac{ {{Sample}} - {{mu}} }{ {{sigma}} /\sqrt{ {{n}} }} = {{Z}}\]
+        <br>
+        The pvalue is equal to {{p_values_one_stdknown}} (Onesided) 
+        <br>
+        The pvalue is equal to {{p_values_two_stdknown}} (Twosided)
+    </div>
+    <div class="Box">
+        <h2>When do you use one sample Z-test?</h2>
+        <p style="text-align: left;font-size:15px;">  
+        A Z-test assumes the data is normally distributed which according to the central limit theorem is when the sample size is large, usually when  n > 30. You use the Z-test for e means when you want to see if there is any different between the means of two normally distributed samples. 
+        One sample Z test is used to test whether the mean of a population is less than, greater than or equal to a specific value μ. 
+        <br>
+        <br>
+        Example, Morel suspects there are less than 210 candies in an M&Ms bag. Morel buys 60 M&Ms bags and count all the candies in each bag. After some calculations Morel found out the mean value were 203 M&Ms in each bag and the variance was 10. What is the p-value of this test? Was Morel right is there less than 210 M&Ms in the bag?
+        <br>
+        <br>
+        H0: There is 210 M&Ms in each bag
+        <br>
+        H1: There is less than 210 M&Ms in each bag
+        <br>
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,170 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Spearman's Rank Correlation Coefficient Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="Spearman" autocomplete="off" method="GET" class="formFormat">
+            <label style="margin-left:-3%;">Sample1</label>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <label>Sample2</label>
+            <br>
+            <br>
+            <textarea columns="20" rows="20" type="text" required="required" name="Sample1" onkeypress="return isNumberKeySpaceDot(event)">{{Sample1}}</textarea>
+            <textarea columns="20" rows="20" type="text" required="required" name="Sample2" onkeypress="return isNumberKeySpaceDot(event)">{{Sample2}}</textarea>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Output</h2>
+        <table class="table-sm table-hover table-striped">   
+            <tbody>        
+            <tr>
+                <th scope="row">Correlation</th>
+                <td>{{statistic}}</td>
+            </tr>
+            <tr>
+                <th scope="row">p-value</th>
+                <td>{{pvalue}}</td>
+            </tr>
+            <tr>
+        </div>
+            </tbody>
+        </table>
+    </div>
+    <div class="Box">
+        <h2>What is the Spearman's Rank Correlation Coefficient?</h2>
+        <p style="text-align: left;font-size:15px;">  
+        <br>
+        When you assume the population behind the sample is not normally distributed, you use a non parametric test. The Spearman's Rank correlation is a non parametric test used to calculate the rank correlation between two variables.
+        <br>
+        <br>
+        To find the rank correlation you first rank all the observations in X and then you rank all the observations in Y. Assign any tied values the average of the ranks they would have received had they not been tied. 
+        <br>
+        <br>
+        The second step is to take the difference between the ranks of X and Y and square them (Di^2). Then you sum all the Di^2 values. 
+        <br>
+        <br>
+        The third step is to use the following formula to find the rank correlation (Rs):
+        <br>
+        \[R_s = 1 - \frac{6\times\sum d_i^2}{n(n^2-1)}\]
+        <br>
+        To test if Rs is significant you use a Spearman's rank correlation table.
+        <br>
+        <br>
+        Example, Bob just started a company and he wants to test if the education level of the employees have a correlation with the difficulty of their tasks. He collects the follow data on all 10 employees:
+        <br>
+        Education level is coded from 1-4 and task difficulty is coded 1-5. 
+        <br>
+        <table class="table-sm table-hover table-striped">   
+            <tbody>        
+                <thead>
+                    <tr>
+                      <th scope="col">Employee</th>
+                      <th scope="col">Education level</th>
+                      <th scope="col">Tasks</th>
+                      <th scope="col">Di^2</th>
+
+                    
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>4, rank = 1.5</td>
+                      <td>5, rank = 1.5</td>
+                      <td>0</td>
+
+                    
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>3, rank = 4</td>
+                      <td>4, rank = 4</td>
+                      <td>0</td>
+                    
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>2, rank = 6.5</td>
+                      <td>3, rank = 6</td>
+                      <td>0.25</td>
+                    
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>1, rank = 9</td>
+                        <td>2, rank = 8</td>
+                        <td>1</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">5</th>
+                        <td>1, rank = 9</td>
+                        <td>1, rank = 10</td>
+                        <td>1</td>
+                        
+                      </tr>
+                      <tr>
+                        <th scope="row">6</th>
+                        <td>3, rank = 4</td>
+                        <td>5, rank = 1.5</td>
+                        <td>6.25</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">7</th>
+                        <td>2, rank = 6.5</td>
+                        <td>4, rank = 4</td>
+                        <td>6.25</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">8</th>
+                        <td>1, rank = 9</td>
+                        <td>2, rank = 8</td>
+                        <td>1</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">9</th>
+                        <td>3, rank = 4</td>
+                        <td>2, rank = 8</td>
+                        <td>16</td>
+                      
+                      </tr>
+                      <tr>
+                        <th scope="row">10</th>
+                        <td>4, rank = 1.5</td>
+                        <td>4, rank = 4</td>
+                        <td>6.25</td>
+                        <tr>
+                            <th scope="row">Total</th>
+                            <td></td>
+                            <td></td>
+                            <td>38</td>
+
+                          
+                          </tr>
+        </table>
+        <p style="text-align: left;font-size:15px;"> 
+            <br>
+            \[R_s = 1 - \frac{6\times 38}{10(10^2-1)} = 0.77\]
+            <br>
+            The test hypothesis are:
+            <br>
+            H0: Rs = 0
+            <br>
+            H1: Rs > 0
+            <br>
+            <br>
+            Since the rank correlation is 0.77 with p-value 0.01 the null hypothesis can be rejected. Education level indeed has a correlation with task difficulty.  
+    </p>
+      </div>
+
+</div>
+{% endblock %}

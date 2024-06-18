@@ -1,0 +1,233 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<span class="calcTitle">Multiple Regression Calculator</span>
+<div class="grid-wrapper">
+  <div class="Box">
+    <h2>Input</h2>
+    <form action="mulRegression" autocomplete="off" method="GET" class="formFormat">
+            <label>Y-values</label>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <label>X1-values</label>
+            &nbsp;&nbsp;&nbsp;
+            <label>X2-values</label>
+            <br>
+            <br>
+        <textarea columns="20" rows="20" type="text" required="required" name="Yinput" onkeypress="return isNumberKeySpaceDot(event)">{{Yinput}}</textarea>
+        <textarea columns="20" rows="20" type="text" required="required" name="X1input" onkeypress="return isNumberKeySpaceDot(event)">{{X1input}}</textarea>
+        <textarea columns="20" rows="20" type="text" required="required" name="X2input" onkeypress="return isNumberKeySpaceDot(event)">{{X2input}}</textarea>
+        <br>
+        <input style="margin-top: 20px;" type="submit">
+    </form>
+</div>
+<div class="Box">
+  <h2>Summary</h2>
+  <table class="table-sm table-hover table-striped">
+    <tbody>
+    <tr>
+        <th scope="row">Sum Y</th>
+        <td>{{sumY1}}</td>
+    </tr>
+    <tr>
+        <th scope="row">Sum X1</th>
+        <td>{{sumX1}}</td>
+    </tr>
+    <tr>
+        <th scope="row">Sum X2</th>
+        <td>{{sumX2}}</td>
+    </tr>
+    <tr>
+        <th scope="row">Sum Y^2<sup></sup></th>
+        <td>{{sumYsq}}</td>
+    </tr>
+    <tr>
+        <th scope="row">Sum X1^2</th>
+        <td>{{sumX1sq}}</td>
+    </tr>
+    <tr>
+        <th scope="row">Sum X2^2</th>
+        <td>{{sumX2sq}}</td>
+    </tr>
+    <tr>
+        <th scope="row">Sum X1Y</th>
+        <td>{{X1Y}}</td>
+    </tr>
+    <tr>
+        <th scope="row">Sum X2Y</th>
+        <td>{{X2Y}}</td>
+    </tr>
+    <tr>
+        <th scope="row">Sum X1*X2</th>
+        <td>{{X1X2}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Mean Y</th>
+      <td>{{mean_Y}}</td>
+  </tr>
+  <tr>
+    <th scope="row">Mean X1</th>
+    <td>{{mean_X1}}</td>
+  </tr>
+  <tr>
+    <th scope="row">Mean X2</th>
+    <td>{{mean_X2}}</td>
+  </tr>
+    </tbody>
+  </table>  
+  <br>
+  <br>
+       <h2>Coefficients</h2>
+      <table class="table-sm table-hover table-striped">   
+          <tbody>        
+          <tr>
+              <th scope="row">Y</th>
+              <td>{{Coef1}}</td>
+          </tr>
+          <tr>
+              <th scope="row">X1</th>
+              <td>{{Coef2}}</td>
+          </tr>
+          <tr>
+              <th scope="row">X2</th>
+              <td>{{Coef3}}</td>
+          </tr>
+          </tbody>
+      </table>
+</div>
+<div class="Box">
+  <h2>Formulas and Output</h2>
+    \[\begin{cases}intecept = \bar{y} - b_{1}\times \bar{x}_{1} - b_{2}\times \bar{x}_{2}
+  
+  
+  \\\sum (x_{1}-\bar{x}_{1})(y-\bar{y}) = b_{1}\sum (x_{1}-\bar{x}_{1})^{2}+{b}_{2}\sum (x_{1}-\bar{x}_{1})(x_{2}-\bar{x}_{2})
+  
+  \\\sum (x_{2}-\bar{x}_{2})(y-\bar{y}) = b_{1}\sum (x_{1}-\bar{x}_{1})(x_{2}-\bar{x}_{2})+{b}_{2}\sum (x_{2}-\bar{x}_{2})^{2}\end{cases}\]
+
+    \[\sum (x_{1}-\bar{x}_{1})(y-\bar{y}) = \sum X_{1} Y
+    - \frac{\sum x_{1}\sum y}{n} = {{X1Y}} - \frac{ {{sumX1}} \times {{sumY1}}  }{n} = {{FirstRow}}\]
+
+    \[\sum (x_{2}-\bar{x}_{2})(y-\bar{y}) = \sum X_{2} Y
+    - \frac{\sum x_{2}\sum y}{n} = {{X2Y}} - \frac{ {{sumX2}} \times {{sumY1}}  }{n} = {{SecondRow}}\]
+
+    \[\sum (x_1-\bar{x}_1)(x_2-\bar{x}_2) =\sum X_1X_2 
+  - \frac{\sum X_1 \sum X_2}{n} = {{X1X2}} - \frac{ {{sumX1}} \times {{sumX2}}  }{n} = {{ThirdRow}}\]
+
+    \[\sum (X_1-\bar{X}_1)^{2}= \sum X_1^{2}-\frac{(\sum X_1)^{2}}{n} = {{sumX1sq}} - \frac{ {{sumX1}}^{2} } {n} = {{FourthRow}}\]
+
+    \[\sum (X_2-\bar{X}_2)^{2}=\sum X_2^{2}-\frac{(\sum X_2)^{2}}{n} = {{sumX2sq}} - \frac{ {{sumX2}}^{2} } {n} = {{FifthRow}}\]
+
+    \[\begin{cases} {{FirstRow}} = b_{1} \times {{FourthRow}} + b_{2} \times {{ThirdRow}}\\ {{SecondRow}} = b_{1} \times {{ThirdRow}} + b_{2} \times {{FifthRow}}\end{cases}\]
+ 
+    \[\begin{eqnarray*}
+    \textrm{Now solve for } b_1 \textrm{ & } b_2
+    \end{eqnarray*}\]
+
+      \[b_1 = {{Coef2}}\]
+
+      \[b_2 = {{Coef3}}\]
+
+      \[intercept = \bar{Y} - b_1 \times \bar{X}_1 - b2 \times \bar{X}_2 = {{mean_Y}} - {{Coef2}} \times {{mean_X1}} - {{Coef3}} \times {{mean_X2}} = {{Coef1}}\]
+    </div>
+<div class="Box">
+  <h2>ANOVA</h2>
+  <div class="tabcontent">
+  {{AnovaModel_StylishTable|safe}}
+  </div>
+  <br>
+  <br>
+    <br>
+        <h2>Goodness-of-fit</h2>
+        <table class="table-sm table-hover table-striped">
+            <tbody>
+            <tr>
+                <th scope="row">R<sup>2</sup></th>
+                <td>{{Rsquared}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Adj. R<sup>2</sup></th>
+                <td>{{adjRsquared}}</td>
+            </tr>
+            </tbody>
+        </table>
+</div>
+<div class="Box">
+  <h2>Correlation Matrix</h2>
+  <div class="tabcontent">
+     {{corrMatrix_StylishTable|safe}}
+  </div>
+  <br>
+  <br>
+  <br>
+  <h2>Variance Inflation Factors</h2>
+  <div class="tabcontent">
+      {{vif_StylishTable|safe}}
+  </div>
+</div>
+<div class="Box">
+    <h2>Residual Plot</h2>
+    <div id="ResPredchart"></div>
+  </div>
+<div class="Box">
+<h2>Normal Q-Q</h2>
+<div id="NormalQQ"></div>
+</div>
+</div>
+<script>
+//-------------------------------------------------------------------------------------------------------Residual Plot ------------------------------------------------------//
+    var options = {
+  series: [{
+  name: "Residual",
+  data: {{plotResPred|safe}}
+}],
+  chart: {
+  height: 350,
+  type: 'scatter',
+  zoom: {
+    enabled: true,
+    type: 'xy'
+  }
+},
+xaxis: {
+  tickAmount: 10,
+  labels: {
+    formatter: function(val) {
+      return parseFloat(val).toFixed(1)
+    }
+  }
+},
+yaxis: {
+  tickAmount: 7
+}
+}
+var ResPred = new ApexCharts(document.querySelector("#ResPredchart"), options);
+ResPred.render();
+//-------------------------------------------------------------------------------------------------------QQ Plot ---------------------------------------------------------//
+var options = {
+  series: [{
+  name: "QQ",
+  data: {{plotQQ|safe}}
+}],
+  chart: {
+  height: 350,
+  type: 'scatter',
+  zoom: {
+    enabled: true,
+    type: 'xy'
+  }
+},
+xaxis: {
+  tickAmount: 10,
+  labels: {
+    formatter: function(val) {
+      return parseFloat(val).toFixed(1)
+    }
+  }
+},
+yaxis: {
+  tickAmount: 7
+}
+}
+var QQPlot = new ApexCharts(document.querySelector("#NormalQQ"), options);
+QQPlot.render();
+</script>
+{% endblock %}

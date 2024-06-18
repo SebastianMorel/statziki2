@@ -1,0 +1,99 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Z-Test (2 Sample) Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input 2 Proportions</h2>
+        <form action="zTest" autocomplete="off" method="GET">
+            <label>Mean1 </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Sample_1List}}" name="Sample_1" onkeypress="return isNumberKeyNegDot(event)"/>
+            <br>
+            <label>Variance1 </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Variance_1}}" name="Variance1" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>n1 </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{n1}}" name="n1" onkeypress="return isNumberKey(event)"/>
+            <br>
+            <label>Mean2 </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Sample_2List}}" name="Sample_2" onkeypress="return isNumberKeyNegDot(event)"/>
+            <br>
+            <label>Variance2 </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Variance_2}}" name="Variance2" onkeypress="return isNumberKeyDot(event)"/>
+            <br>
+            <label>n2 </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{n2}}" name="n2" onkeypress="return isNumberKey(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Formula and Output</h2>
+        \[Z = \frac{\bar{x}-\bar{x}}{\sqrt{\frac{\sigma_1^{2}}{n_1}+
+        \frac{\sigma_2^{2}}{n2}}} = \frac{ {{Sample_1List}} - {{Sample_2List}} }{\sqrt{\frac{ {{Variance_1}}^{2}}{ {{n1}} }+
+        \frac{ {{Variance_2}}^{2}}{ {{n2}} }}} = {{Z_STD_known}}\]
+        <br>
+        The pvalue is equal to {{p_values_one_stdknown}} (Onesided) 
+        <br>
+        The pvalue is equal to {{p_values_two_stdknown}} (Twosided)
+    </div>
+    <div class="Box">
+        <h2>When do you use Z-test two independent sample means?</h2>
+        <p style="text-align: left;font-size:15px;">  
+        A Z-test assumes the data is normally distributed which according to the central limit theorem is when the sample size is large, usually when  n > 30. You use the Z-test for two independent
+        sample means when you want to see if there is any different between the means of two normally distributed samples. 
+        <br>
+        <br>
+        Example, Shear strength measurements derived from unconfined compression tests for two types of soils gave the results shown in the following table (measurements in tons per square foot). Do
+        the soils appear to differ with respect to average shear strength, at the 1% significance level?
+        <br>
+        <br>
+        <table class="table-sm table-hover table-striped"style="margin-top:-25px;">   
+            <tbody>        
+                <thead>
+                    <tr>
+                      <th scope="col">Soil type 1</th>
+                      <th scope="col">Soil type 2</th>                   
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                        <td>n1 = 30</td>
+                        <td>n2 = 35</td>                                           
+                    </tr>
+                    <tr>
+                        <td>mean1 = 1.65</td>
+                        <td>mean2 = 1.43</td>
+                    </tr>
+                    <tr>
+                        <td>s1 = 0.26</td>
+                        <td>s2 = 0.22</td>
+                    
+                    </tr>
+        </table>
+        <br>
+        <p style="text-align: left;font-size:15px;">
+        When performing a Z-test on two independent samples you want to sum the variances of the means and then take the square root to find the standard deviation of variance sum. In this example you are given the 
+        standard deviations for each sample thus you need to take the square of the standar deviations to find the variances:
+        <br>
+        - Variance sample 1 = 0.26^2 = 0.0676
+        <br>
+        - Variance sample 2 = 0.22^2 = 0.0484
+        <br>
+        <br>
+        Now when you have the variances you use the formula for Z-test two independent samples or you can use the calculator provided. 
+        <br>
+        <br>
+        The Z-value is 3.648 which is above the critical value of 2.5758 (two tailed test), thus there is a significant difference between the soils.
+        </p>
+      </div>
+</div>
+{% endblock %}

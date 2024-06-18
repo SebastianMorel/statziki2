@@ -1,0 +1,92 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<span class="calcTitle">Paired T-Test Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="PairedTtest" autocomplete="off" method="GET">
+            <label>Treatment 1</label>
+            <br>
+            <input class="wideInput" type="text" required="required" value="{{Sample1}}" name="Treatment1" onkeypress="return isNumberKeySpaceDot(event)"/>
+            <br>
+            <label>Treatment 2</label>
+            <br>
+            <input class="wideInput" type="text" required="required" value="{{Sample2}}" name="Treatment2" onkeypress="return isNumberKeySpaceDot(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Summary</h2>
+        <table class="table-sm table-hover table-striped">   
+            <tbody>        
+            <tr>
+                <th scope="row">Mean Diff</th>
+                <td>{{DiffMEAN}}</td>
+            </tr>
+            <tr>
+                <th scope="row">STD Diff</th>
+                <td>{{DiffSTD}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum diff</th>
+                <td>{{sumDiff}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Sum diff^2<sup></sup></th>
+                <td>{{sumsquaredDiff}}</td>
+            </tr>
+            <tr>
+                <th scope="row">n</th>
+                <td>{{n}}</td>
+            </tr>
+            <tr>
+                <th scope="row">t-value</th>
+                <td>{{tvalue}}</td>
+            </tr>
+            <tr>
+                <th scope="row">p-value oneside</th>
+                <td>{{pval_one_sided_paired}}</td>
+            </tr>
+            <tr>
+                <th scope="row">p-value twoside</th>
+                <td>{{pval_two_sided_paired}}</td>
+            </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+    <div class="Box">
+        <h2>Formulas and Output</h2>
+        \[S_d = \left[\frac{\sum d_j^2 - \frac{1}{n}(\sum d_j)^2}{n-1}  \right] = \left[\frac{ {{sumsquaredDiff}} - \frac{1}{  {{n}} }( {{sumDiff}} )^2}{ {{n}} -1}  \right]^{0.5} = {{DiffSTD}}\]
+        
+        \[dmean = \frac{1}{n} \sum d_j = \frac{1}{ {{n}} } {{sumDiff}} = {{DiffMEAN}} \]
+
+        \[t = \frac{diffmean }{S_d/\sqrt{n}} = \frac{ {{DiffMEAN}} }{ {{DiffSTD}} /\sqrt{ {{n}} }} = {{tvalue}}\]
+
+        \[H_0: \mu_d = 0\]
+        \[H_1: \mu_d \neq 0\]
+    </div>
+    <div class="Box">
+        <h2>When should you use a paired t-test? </h2>
+        <p style="text-align: left;font-size:15px;">  
+         A paired mean test is used to deternmine whether the mean difference between two sets of observations is zero. This method is commonly used compare the same dataset at different
+         time points to see if there is any differences between the dataset from time point 1 and time point 2. 
+         <br>
+         <br> 
+         The paired t-test assumes the variances are unkown, commonly when n < 50. 
+        <br>
+        <br>
+        Example, professor Bob have two learning methods and he wants to test which method is the best. During time period 1 he uses method X and during time period 2 he used method Y on the same students, he then 
+        measure the average exam score on each student and compare the score from period 1 and 2. The data he collected can be seen in the lists below. 
+        <br>
+        <br>
+        Method X average score = [70 68 66 98 77 66 55 3 98]
+        <br>
+        Method Y average score = [73 69 78 99 88 68 78 4 99]
+    </div>
+</div>
+{% endblock %}

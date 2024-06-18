@@ -1,0 +1,167 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Risk Ratio Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="riskRatio" autocomplete="off" method="GET">
+            <label>A </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Group11}}" name="Group11" onkeypress="return isNumberKeyNegDot(event)"/>
+            <br>
+            <label>B </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Group12}}" name="Group12" onkeypress="return isNumberKeyNegDot(event)"/>
+            <br>
+            <label>C </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Group21}}" name="Group21" onkeypress="return isNumberKeyNegDot(event)"/>
+            <br>
+            <label>D </label>
+            <br>
+            <input style="text-align: center;" type="text" required="required" value="{{Group22}}" name="Group22" onkeypress="return isNumberKeyNegDot(event)"/>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>
+            four-field table</h2>
+        <table class="table-sm table-hover table-striped"style="margin-top:10px; margin-left:-150px;">   
+            <tbody>        
+                  <tbody>
+                    <tr>
+                      <td>A</td>
+                      <td>B</td>
+                      <td>r1</td>
+                    
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>D</td>
+                        <td>r2</td>
+                    
+                    </tr>
+                    <tr>
+                        <td>k1</td>
+                        <td>k2</td>
+                        <td>n</td>
+                    
+                    </tr>
+        </table>
+        <table class="table-sm table-hover table-striped"style="margin-top:-95px; margin-left:150px;">   
+            <tbody>        
+                  <tbody>
+                    <tr>
+                      <td>{{Group11}}</td>
+                      <td>{{Group12}}</td>
+                      <td>{{r1}}</td>
+                    
+                    </tr>
+                    <tr>
+                        <td>{{Group21}}</td>
+                        <td>{{Group22}}</td>
+                        <td>{{r2}}</td>
+                    
+                    </tr>
+                    <tr>
+                        <td>{{k1}}</td>
+                        <td>{{k2}}</td>
+                        <td>{{n}}</td>
+                    
+                    </tr>
+        </table>
+        \[RR = \frac{(A \times D- B \times C)^{2}}{(A+ B)\times (C + D)
+            \times (A + C) \times (B + D)} 
+            \]
+        \[RR = \frac{( {{Group11}} \times {{Group22}} - {{Group12}} \times {{Group21}} )^{2}}{( {{Group11}}  + {{Group12}} )\times ( {{Group21}}  + {{Group22}})
+            \times ( {{Group11}} + {{Group21}} ) \times ( {{Group12}} + {{Group22}} )} 
+            \]
+            \[RR = {{RR}}\]
+            <br>
+
+            \[SE(lnRR) = \sqrt{\frac{1}{a}-\frac{1}{a+c}+\frac{1}{b}
+            -\frac{1}{b+d}}\]
+            \[\sqrt{\frac{1}{ {{Group11}} }-\frac{1}{ {{Group11}} + {{Group21}}}+\frac{1}{ {{Group12}} }
+            -\frac{1}{ {{Group12}} + {{Group22}} }} = {{seRR}}\]
+            \[lnRR = ln {{RR}} = {{lnRR}}\]
+            <br>
+            \[ConfidenceInterval = lnRR \pm 1.96 \times SE(lnRR)\]
+            \[ {{lnRR}} \pm (1.96 \times {{seRR}})\]
+            \[ {{LowerlnRR}} \leq lnRR \leq {{UpperlnRR}}\]
+            \[ e^{ {{LowerlnRR}} } \leq RR \leq e^{ {{UpperlnRR}} }\]
+            \[ {{LowerRR}} \leq RR \leq {{UpperRR}}\]
+    </div>
+    <div class="Box">
+        <h2>What is a risk ratio?</h2>
+        <p style="text-align: left;font-size:15px;">  
+            Risk ratio is a measure of the risk of a certain event happening in one group compared to the risk of the same event happening to another group. A risk ratio of 1 (or close to 1) means there is no difference
+            between two groups in terms of their risk. <br>
+            <br>
+            A confidence interval is used in risk ratio to see if the difference between the groups are significant. If the confidence interval for RR (risk ratio) covers 1 then the difference is not significant.
+            <br> 
+            Since risk ratio is not normally distributed and a confidence interval requires normally distributed variables you need to take the natural log (ln) for RR and its standard error SE(RR) which is SE(lnRR). Formulas to find the 
+            natural log of the risk ratio and the standard error easily is provided in the calculation. 
+            <br>
+        Since we are using normally distributed variables (after log transform) we can now use a Z-value to find the confidence interval, Z = 1.96 for a 5% confidence interval. 
+        <br>
+        <br>
+        Example, The physicians' health study. To see if acetylsalicylic acid (aspirin) has a preventive effect against a myocardial infarction (heart attack). A study was conducted on 22071 healthy men 
+        where 10898 got aspirin and 11034 of them got a placebo (no treatment). 
+        <br>
+        <br>
+        <table class="table-sm table-hover table-striped"style="margin-top:-20px; margin-left:-280px;">   
+            <tbody>        
+                  <tbody>
+                    <tr>
+                      <td>Heart Attack</td>
+                      <td>Aspirin</td>
+                      <td>Placebo</td>
+                      <td>Sum</td>
+                    
+                    </tr>
+                    <tr>
+                        <td>Yes</td>
+                        <td>139</td>
+                        <td>239</td>
+                        <td>378</td>
+                    
+                    </tr>
+                    <tr>
+                        <td>No</td>
+                        <td>10898</td>
+                        <td>10795</td>
+                        <td>21693</td>
+                    
+                    </tr>
+                    <tr>
+                        <td>Sum</td>
+                        <td>11037</td>
+                        <td>11034</td>
+                        <td>22071</td>
+                    
+                    </tr>
+        </table>
+        <br>
+        <p style="text-align: left;font-size:15px;">
+            
+            A = 139 <br>
+            B = 239 <br>
+            C = 10898 <br>
+            D = 10795 <br>
+            <br>
+            The risk ratio (RR) is 0.5814 and the natural log (ln) of 0.5814 is -0.5422. The standard error for lnRR is 0.1058 and we would like to find a 95% confidence interval thus we use Z = 1.96. 
+            <br>
+            <br>
+            The confidence interval for lnRR is -0.7496 ≤ lnRR < -0.3348 <br> However you can't interpretet the natural log of risk, in order to get rid of the natural log we take the antilog which is e^(lower interval lnRR) & e^(upper interval lnRR).
+            <br>
+            <br>
+            The confidence interval after taking the antilog is 0.472 ≤ RR ≤ 0.715 which means the risk a heart attack given you took aspirin is between 47.2% and 71.5% of the risk that you would get if you did not take aspirin. In other words your risk of getting a heart attack
+            given you take aspirin is 100-47.2 = 52.75% & 100-71.5 = 28.5% lower than if you did not take aspirin.
+        </p>
+      </div>
+</div>
+{% endblock %}

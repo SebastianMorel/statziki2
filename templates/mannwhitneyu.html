@@ -1,0 +1,62 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+<script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<span class="calcTitle">Mann–Whitney U-Test Calculator</span>
+<div class="grid-wrapper">
+    <div class="Box">
+        <h2>Input</h2>
+        <form action="Mannwhitneyu" autocomplete="off" method="GET" class="formFormat">
+            <label style="margin-left:-3%;">Sample1</label>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <label>Sample2</label>
+            <br>
+            <br>
+            <textarea columns="20" rows="20" type="text" required="required" name="Sample1" onkeypress="return isNumberKeySpaceDot(event)">{{Sample1}}</textarea>
+            <textarea columns="20" rows="20" type="text" required="required" name="Sample2" onkeypress="return isNumberKeySpaceDot(event)">{{Sample2}}</textarea>
+            <br>
+            <br>
+            <input style="margin-top: 20px;" type="submit">
+        </form>
+    </div>
+    <div class="Box">
+        <h2>Output</h2>
+        <table class="table-sm table-hover table-striped">   
+            <tbody>        
+            <tr>
+                <th scope="row">Statistic</th>
+                <td>{{statistic}}</td>
+            </tr>
+            <tr>
+                <th scope="row">p-value</th>
+                <td>{{pvalue}}</td>
+            </tr>
+            <tr>
+        </div>
+            </tbody>
+        </table>
+    </div>
+    <div class="Box">
+        <h2>What is the Mann-Whitney U-test?</h2>
+        <p style="text-align: left;font-size:15px;">  
+        <br>
+        When you assume the population behind the sample is not normally distributed, you use a non parametric test. Mann-Whitney U-test is a non parametric test used to compare if two different samples are different, the only assumption for this test is that you can rank the observations. 
+        <br>
+        <br>
+        The first step is to rank all observations from both samples from lowest to highest. The smallest value gets rank 1, second smallest rank 2 and so on. 
+        If two or more values ​​get the same rank, they are called
+        "Ties". All these values ​​then get the same rank by calculating the mean on the ranks that would have been allocated to the tied numbers. For example, you observe the number 13 four times and you are currently on the rank
+        3 then the rank for the ties would be (4+5+6+7)/4 = 5.5.
+        <br>
+        <br>
+        The second step is to sum all the ranks for the smallest sample (R1). When R1 is calculated you want to calculate the symmetrical value (RS) with the following formula RS = n1(n1+n2+1)-R1.
+        <br>
+        <br>
+        The third step is to find the p-value It can be found using a Mann-Whitney U-test table and the degrees of freedom are n1 (column) and n2 (row). If the smallest value of R1 or RS is smaller than the critical value you can reject the null hypothesis. 
+        <br>
+        <br>
+        BEEP BOOP WARNING ALERT. The calculator provided on this page does not use the same method (the handling of ties is different) thus the test statistic will have different values; however, the p-values will approximately be the same. 
+        </p>
+      </div>
+</div>
+{% endblock %}
