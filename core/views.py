@@ -757,11 +757,11 @@ def varianceAnalysis(request):
     return render(request,'varianceAnalysis.html',context)
 
 def varianceAnalysis2(request):
-    Var1 = get_request_param(request, 'Var1', 1)
-    n1 = get_request_param(request, 'n1', 1)
-    Var2 = get_request_param(request, 'Var2', 1)
-    n2 = get_request_param(request, 'n2', 1)
-    SignificanceF = get_request_param(request, 'SignificanceF', 1)
+    Var1 = get_request_param(request, 'Var1', 2)
+    n1 = get_request_param(request, 'n1', 2)
+    Var2 = get_request_param(request, 'Var2', 2)
+    n2 = get_request_param(request, 'n2', 2)
+    SignificanceF = get_request_param(request, 'SignificanceF', 2)
 
     F = Var1/Var2
     p_value = f.cdf(F, n1-1, n2-1)
